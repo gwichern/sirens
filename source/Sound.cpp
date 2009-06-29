@@ -44,11 +44,11 @@ namespace Sirens {
 	}
 	
 	int Sound::getSamplesPerFrame() {
-		return frameLength * (double)getSampleRate();
+		return int(frameLength * double(getSampleRate()));
 	}
 	
 	int Sound::getSamplesPerHop() {
-		return hopLength * (double)getSampleRate();
+		return hopLength * double(getSampleRate());
 	}
 	
 	int Sound::getFrameCount() {
