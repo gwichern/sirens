@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __MATH_SUPPORT_H__
-#define __MATH_SUPPORT_H__
+#ifndef MATH_SUPPORT_H
+#define MATH_SUPPORT_H
 
 #include <cmath>
 using namespace std;
