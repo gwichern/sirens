@@ -48,7 +48,7 @@ namespace Sirens {
 	}
 	
 	int Sound::getSamplesPerHop() {
-		return hopLength * double(getSampleRate());
+		return int(hopLength * double(getSampleRate()));
 	}
 	
 	int Sound::getFrameCount() {
@@ -61,7 +61,7 @@ namespace Sirens {
 	}
 	
 	int Sound::getSampleRate() {
-		return file->getFileRate();
+		return int(file->getFileRate());
 	}
 	
 	int Sound::getFFTSize() {
