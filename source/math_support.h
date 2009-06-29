@@ -7,7 +7,8 @@
  *
  */
 
-#pragma once
+#ifndef __MATH_SUPPORT_H__
+#define __MATH_SUPPORT_H__
 
 #include <cmath>
 using namespace std;
@@ -31,3 +32,5 @@ double hz_to_mel(double hz);
 double mel_to_hz(double mel);
 
 double* create_hamming_window(int size);
+
+#endif
