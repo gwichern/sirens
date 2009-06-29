@@ -12,7 +12,7 @@
 #include <cmath>
 using namespace std;
 
-const double pi = 4 * asin(1);
+const double pi = 4 * asin(1.0);
  
 // General math functions.
 int minimum(int a, int b);
