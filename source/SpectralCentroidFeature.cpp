@@ -81,7 +81,9 @@ namespace Sirens {
 		for (int i = 1; i < size; i++) {
 			value += (*input_item) * (*input_item) * ((*weight_item) / sum) * (*unit_item);
 			
-			input_item ++; unit_item ++; weight_item ++;
+			input_item ++; 
+			unit_item ++; 
+			weight_item ++;
 		}
 	}
 
