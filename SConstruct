@@ -22,7 +22,6 @@ environment.Append(CPPPATH = GetOption('include'))
 environment.Append(PREFIX = GetOption('prefix'))
 
 library = environment.Library('sirens', compile_source)
-        installed_foo = env.Install('$PREFIX/usr/bin', 'foo.in')
 environment.Install('$PREFIX/lib', library)
 environment.Install('$PREFIX/include/sirens', install_headers)
 environment.Alias('install', ['/PREFIX/lib', '$PREFIX/include/sirens'])
