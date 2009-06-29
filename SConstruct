@@ -14,8 +14,12 @@ compile_source = Glob(os.path.join(source_prefix, '*.cpp'))
 compile_stk_source = Glob(os.path.join(source_prefix, 'stk/*.cpp'))
 compile_source.extend(compile_stk_source)
 
+AddOption('--prefix', dest = 'prefix', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'installation prefix')
+AddOption('--include', dest = 'prefix', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'installation prefix')
+
 environment = Environment(CC = 'gcc', CPPDEFINES = '__OS_MACOSX__')
-environment.Append(CPPPATH = os.environ['CPPPATH'])
+environment.Append(CPPPATH = GetOption('include'))
+environment.Append(PREFIX = GetOption('prefix'))
 
 library = environment.Library('sirens', compile_source)
 environment.Install('/usr/local/lib', library)
