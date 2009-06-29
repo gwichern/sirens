@@ -15,10 +15,9 @@ compile_stk_source = Glob(os.path.join(source_prefix, 'stk/*.cpp'))
 compile_source.extend(compile_stk_source)
 
 AddOption('--prefix', dest = 'prefix', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'installation prefix')
-AddOption('--include', dest = 'include', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'additional include directories')
+AddOption('--include-directory', dest = 'include', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'additional include directories')
 
 environment = Environment(CC = 'gcc', CPPDEFINES = '__OS_MACOSX__')
-print GetOption('include')
 environment.Append(CPPPATH = GetOption('include'))
 environment.Append(PREFIX = GetOption('prefix'))
 
