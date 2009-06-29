@@ -15,7 +15,7 @@ compile_stk_source = Glob(os.path.join(source_prefix, 'stk/*.cpp'))
 compile_source.extend(compile_stk_source)
 
 environment = Environment(CC = 'gcc', CPPDEFINES = '__OS_MACOSX__')
-environment.append(CPPPATH = os.environ['CPPPATH'])
+environment.Append(CPPPATH = os.environ['CPPPATH'])
 
 library = environment.Library('sirens', compile_source)
 environment.Install('/usr/local/lib', library)
