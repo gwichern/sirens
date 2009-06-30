@@ -27,7 +27,7 @@ environment = Environment(CC = 'gcc', CPPDEFINES = '__OS_MACOSX__')
 environment.Append(CPPPATH = GetOption('include'))
 environment.Append(PREFIX = GetOption('prefix'))
 
-library = environment.Library('sirens', compile_source)
+library = environment.Library('sirens', compile_source, LIBS = ['fftw3'])
 environment.Install('$PREFIX/lib', library)
 environment.Install('$PREFIX/include/sirens', install_headers)
 environment.Install('$PREFIX/include/sirens/stk', install_stk_headers)
