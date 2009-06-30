@@ -1,11 +1,11 @@
 #include "FFT.h"
 
-extern void fftw_plan_with_nthreads(int nthreads);
-extern fftw_plan fftw_plan_dft_r2c_1d(int n, double *in, fftw_complex *out, unsigned flags);
-extern void fftw_execute(const fftw_plan plan);
-extern void fftw_destroy_plan(fftw_plan plan);
-extern void *fftw_malloc(size_t n);
-extern void fftw_free(void *p);
+extern "C" void fftw_plan_with_nthreads(int nthreads);
+extern "C" fftw_plan fftw_plan_dft_r2c_1d(int n, double *in, fftw_complex *out, unsigned flags);
+extern "C" void fftw_execute(const fftw_plan plan);
+extern "C" void fftw_destroy_plan(fftw_plan plan);
+extern "C" void *fftw_malloc(size_t n);
+extern "C" void fftw_free(void *p);
 
 namespace Sirens {
 	FFT::FFT(int fft_size, int fft_threads, double* input) {
