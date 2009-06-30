@@ -4,7 +4,7 @@ Sirens is a library for segmentation, indexing, and retrieval of environmental a
 Sirens is being developed simultaneously with [sirens-ruby](http://github.com/plant/sirens-ruby), a Ruby gem that implements the features within Sirens.
 
 # Requirements
-Any application using Sirens also needs to link against [STK](http://ccrma.stanford.edu/software/stk/) and [FFTW](http://www.fftw.org).
+Any application using Sirens also needs to link against [FFTW](http://www.fftw.org).
 
 # Installation
 To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Then, perform the following commands in the project's directory:
@@ -20,6 +20,8 @@ To get rid of intermediate build files, type:
 Coming soon.
 
 # Acknowledgements
+Sirens uses classes from the [Synthesis Toolkit in C++](http://ccrma.stanford.edu/software/stk) for reading audio files and managing threads.
+
 Sirens is based off research within the Arts, Media and Engineering program at Arizona State University. For more information, the following papers may be of interest:
 
 1. Gordon Wichern, H. Thornburg, B. Mechtley, A. Fink, A Spanias, and K. Tu, “Robust multi-feature segmentation and indexing for natural sound environments,” in _Proc. of IEEE/EURASIP International Workshop on Content Based Multimedia Indexing (CBMI)_, Bordeaux France, July 2007.
