@@ -1,10 +1,16 @@
 import os
 
 source_prefix = 'source/'
+arch = os.uname()[0]
 stk_flags = ""
 
-if os.uname()[0] == 'Darwin':
+if arch == 'Darwin':
 	stk_flags = '-D__MACOSX_CORE__'
+elif arch == 'Linux':
+	if os.path.isfile('/proc/asound'):
+		stk_flags = '-D__LINUX_ALSA__'
+	else:
+		stk_flags = '-D__LINUX_OSS__'
 
 install_feature_headers = [
 	'features/SpectralCentroid.h', 
