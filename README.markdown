@@ -25,7 +25,7 @@ If you do not have root access, you may have troubles installing Sirens. In this
 
 Additionally, if you need to point the Sirens install to a specific directory to find the FFTW header, you can specify any additional parameters to the compiler using $CPPFLAGS. For example, to use ~/local/include/fftw3.h:
 	
-	export CPPFLAGS=-I$HOME/include
+	export CPPFLAGS=-I$HOME/local/include
 
 # Example
 Coming soon.
