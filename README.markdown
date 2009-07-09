@@ -17,10 +17,11 @@ To get rid of intermediate build files, type:
 	scons -c
 
 ## Parameters
-If you do not have root access, you may have troubles installing Sirens. In this case, you can put the library in a custom directory. For example,
+If you do not have root access, you may have troubles installing Sirens. In this case, you can put the library in a custom directory. For example, to put the library in $HOME/local/lib and the includes in $HOME/local/include/sirens, you can perform the following:
 
 	scons
-	scons install --prefix=$HOME/lib
+	scons install --prefix=$HOME/local
+	
 
 Additionally, if you need to point the Sirens install to a specific directory to find the FFTW header, you can do the following before building:
 	
