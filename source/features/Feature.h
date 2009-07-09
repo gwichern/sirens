@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-#include "stk/Thread.h"
+#include "../stk/Thread.h"
 using namespace stk;
 
 #include "../CircularArray.h"
