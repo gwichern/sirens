@@ -17,7 +17,7 @@ To get rid of intermediate build files, type:
 	scons -c
 
 ## Parameters
-If you do not have root access, you may have troubles installing Sirens. In this case, you can put the library in a custom directory. For example, to put the library in $HOME/local/lib and the includes in $HOME/local/include/sirens, you can perform the following:
+If you do not have root access, you may have troubles installing Sirens. In this case, you can put the library in a custom directory. For example, to put the library in ~/local/lib and the includes in ~/local/include/sirens, you can perform the following:
 
 	scons
 	scons install --prefix=$HOME/local
