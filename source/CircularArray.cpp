@@ -1,7 +1,7 @@
 #include "CircularArray.h"
 
-#include "math_support.h"
-#include "string_support.h"
+#include "support/math_support.h"
+#include "support/string_support.h"
 
 namespace Sirens {
 	CircularArray::CircularArray(int max_size, bool pad_next_power) {
