@@ -7,7 +7,7 @@ Sirens is being developed simultaneously with [sirens-ruby](http://github.com/pl
 Any application using Sirens also needs to link against [FFTW](http://www.fftw.org).
 
 # Installation
-To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Then, perform the following commands in the project's directory:
+To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Additionally, make sure you have the [FFTW](http://www.fftw.org) headers installed. Then, perform the following commands in the project's directory:
 
 	scons
 	scons install
@@ -15,6 +15,16 @@ To install Sirens, make sure you have [Python](http://www.python.org) and the [S
 To get rid of intermediate build files, type:
 	
 	scons -c
+
+## Parameters
+If you do not have root access, you may have troubles installing Sirens. In this case, you can put the library in a custom directory. For example,
+
+	scons
+	scons install --prefix=$HOME/lib
+
+Additionally, if you need to point the Sirens install to a specific directory to find the FFTW header, you can do the following before building:
+	
+	export CPPFLAGS=-I/path/to/include
 
 # Example
 Coming soon.
