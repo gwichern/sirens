@@ -5,7 +5,7 @@ using namespace std;
 
 #include "FFT.h"
 #include "CircularArray.h"
-#include "math_support.h"
+#include "support/math_support.h"
 
 namespace Sirens {
 	Sound::Sound() {

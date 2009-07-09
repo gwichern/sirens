@@ -8,7 +8,7 @@ using namespace std;
 #include "stk/FileWvIn.h"
 using namespace stk;
 
-#include "Feature.h"
+#include "features/Feature.h"
 
 namespace Sirens {	
 	class Feature;
