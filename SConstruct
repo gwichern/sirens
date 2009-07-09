@@ -49,6 +49,7 @@ environment = Environment(CC = 'gcc')
 
 try:
 	environment.Append(CPPFLAGS = os.environ['CPPFLAGS'] + stk_flags)
+	print "Using CPPFLAGS: " + os.environ['CPPFLAGS']
 except KeyError:
 	environment.Append(CPPFLAGS = stk_flags)
 
