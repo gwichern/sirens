@@ -56,4 +56,6 @@ int main() {
 	delete loudness;
 	delete temporal_sparsity;
 	delete spectral_sparsity;
+	
+	return 0;
 }
