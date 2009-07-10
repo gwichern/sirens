@@ -40,7 +40,8 @@ namespace Sirens {
 		
 		void prepareCalculation();
 		
-		void setHistorySize(int history_size);
+		void setMaxHistorySize(int history_size);
+		int getMaxHistorySize();
 		int getHistorySize();
 		
 		string historyString();

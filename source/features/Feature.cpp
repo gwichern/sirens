@@ -44,7 +44,7 @@ namespace Sirens {
 		performCalculation();
 	}
 	
-	void Feature::setHistorySize(int history_size) {
+	void Feature::setMaxHistorySize(int history_size) {
 		CircularArray* new_history = new CircularArray(history_size, false);
 		
 		if (history) {
@@ -57,6 +57,10 @@ namespace Sirens {
 		history = new_history;
 	}
 	
+	
+	int Feature::getMaxHistorySize() {
+		return history->getMaxSize();
+	}
 	
 	int Feature::getHistorySize() {
 		return history->getSize();
