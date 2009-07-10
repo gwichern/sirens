@@ -14,7 +14,6 @@ namespace Sirens {
 	class Sound {
 	protected:
 		double hopLength, frameLength;
-		int fftThreads;
 		
 		// File information.
 		string path;

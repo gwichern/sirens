@@ -12,7 +12,7 @@ namespace Sirens {
 		int fftSize;
 		
 	public:
-		FFT(int fft_size, int fft_threads, double* input);
+		FFT(int fft_size, double* input);
 		~FFT();
 		
 		void calculate();

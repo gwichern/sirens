@@ -100,7 +100,7 @@ namespace Sirens {
 		CircularArray spectrum_array(getSpectrumSize());			// Spectrum magnitudes of the current frame.
 		
 		// Prepare FFT.
-		FFT fft(getFFTSize(), fftThreads, windowed_array.getData());
+		FFT fft(getFFTSize(), windowed_array.getData());
 		
 		double* window = create_hamming_window(getSamplesPerFrame());
 		

@@ -1,12 +1,10 @@
 #include "FFT.h"
 
 namespace Sirens {
-	FFT::FFT(int fft_size, int fft_threads, double* input) {
+	FFT::FFT(int fft_size, double* input) {
 		fftSize = fft_size;
 		
-		output = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * getOutputSize());
-		
-		fftw_plan_with_nthreads(fft_threads);
+		output = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * getOutputSize());		
 		plan = fftw_plan_dft_r2c_1d(getInputSize(), input, output, FFTW_ESTIMATE);
 	}
 	
