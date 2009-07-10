@@ -13,7 +13,7 @@ namespace Sirens {
 		delete rmsWindow;
 	}
 	
-	void TemporalSparsity::setWindowSize(int window_size) {		
+	void TemporalSparsity::setWindowSize(int window_size) {	
 		CircularArray* new_window = new CircularArray(window_size);
 				
 		if (rmsWindow) {
@@ -27,7 +27,7 @@ namespace Sirens {
 	}
 	
 	int TemporalSparsity::getWindowSize() {
-		return rmsWindow->getSize();
+		return rmsWindow->getMaxSize();
 	}
 	
 	void TemporalSparsity::performCalculation() {
