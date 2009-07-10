@@ -4,6 +4,7 @@ source_prefix = 'source/'
 
 # Prefix option for alternate install path.
 AddOption('--prefix', default = '/usr/local', dest = 'prefix', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'installation prefix')
+AddOption('--shared', dest='shared', type = 'string', nargs = 0, action = 'store', help = 'use to build shared library')
 
 # STK macros.
 stk_flags = ""
@@ -72,8 +73,9 @@ except KeyError:
 
 environment.Append(PREFIX = GetOption('prefix'))
 
-library = environment.Library('sirens', compile_source)
+library = environment.Library('sirens', compile_source) 
 environment.Install('$PREFIX/lib', library)
+
 environment.Install('$PREFIX/include/sirens', install_headers)
 environment.Install('$PREFIX/include/sirens/stk', install_stk_headers)
 environment.Install('$PREFIX/include/sirens/features', install_feature_headers)
