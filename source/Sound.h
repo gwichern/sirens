@@ -10,10 +10,7 @@ using namespace stk;
 
 #include "features/Feature.h"
 
-namespace Sirens {	
-	class Feature;
-	class WindowFunction;
-	
+namespace Sirens {
 	class Sound {
 	protected:
 		double hopLength, frameLength;
@@ -60,8 +57,11 @@ namespace Sirens {
 		vector<Feature*> getSpectralFeatures();
 		vector<Feature*> getSampleFeatures();
 		
-		Feature* getSpectralFeatureAt(int i);
-		Feature* getSampleFeatureAt(int i);
+		void addSpectralFeature(Feature* feature);
+		void addSampleFeature(Feature* feature);
+		
+		void clearSpectralFeatures();
+		void clearSampleFeatures();
 	};
 }
 

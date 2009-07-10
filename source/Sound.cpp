@@ -167,19 +167,27 @@ namespace Sirens {
 		sampleFeatures = features;
 	}
 	
+	void Sound::addSpectralFeature(Feature* feature) {
+		spectralFeatures.push_back(feature);
+	}
+	
+	void Sound::addSampleFeature(Feature* feature) {
+		sampleFeatures.push_back(feature);
+	}
+	
+	void Sound::clearSpectralFeatures() {
+		spectralFeatures.clear();
+	}
+	
+	void Sound::clearSampleFeatures() {
+		sampleFeatures.clear();
+	}
+	
 	vector<Feature*> Sound::getSpectralFeatures() {
 		return spectralFeatures;
 	}
 	
 	vector<Feature*> Sound::getSampleFeatures() {
 		return sampleFeatures;
-	}
-	
-	Feature* Sound::getSpectralFeatureAt(int i) {
-		return spectralFeatures[i];
-	}
-	
-	Feature* Sound::getSampleFeatureAt(int i) {
-		return sampleFeatures[i];
 	}
 }

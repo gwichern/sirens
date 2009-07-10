@@ -23,7 +23,7 @@ namespace Sirens {
 			
 		virtual void initialize() {};
 		virtual void freeMemory() {};
-			
+		
 	public:
 		Feature(int history_size = 1);
 		virtual ~Feature();
