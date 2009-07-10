@@ -11,14 +11,16 @@ arch = os.uname()[0]
 
 if arch == 'Darwin':
 	stk_flags = '-D__MACOSX_CORE__'
-elif arch == 'Linux':
-	if os.path.isfile('/proc/asound'):
-		stk_flags = '-D__LINUX_ALSA__'
-	else:
-		stk_flags = '-D__LINUX_OSS__'
-
-if sys.byteorder == 'little':
-	stk_flags = stk_flags + " -D__LITTLE_ENDIAN__"
+else:
+	if arch == 'Linux':
+		if os.path.isfile('/proc/asound'):
+			stk_flags = '-D__LINUX_ALSA__'
+		else:
+			stk_flags = '-D__LINUX_OSS__'
+	
+	
+		if sys.byteorder == 'little':
+			stk_flags = stk_flags + " -D__LITTLE_ENDIAN__"
 
 # Header files to install.
 install_feature_headers = [
