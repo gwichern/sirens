@@ -1,8 +1,13 @@
 import os
 
 source_prefix = 'source/'
-arch = os.uname()[0]
+
+# Prefix option for alternate install path.
+AddOption('--prefix', default = '/usr/local', dest = 'prefix', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'installation prefix')
+
+# STK macros.
 stk_flags = ""
+arch = os.uname()[0]
 
 if arch == 'Darwin':
 	stk_flags = '-D__MACOSX_CORE__'
@@ -12,6 +17,10 @@ elif arch == 'Linux':
 	else:
 		stk_flags = '-D__LINUX_OSS__'
 
+if sys.byteorder == 'little'
+	stk_flags = stk_flags + " -D__LITTLE_ENDIAN__"
+
+# Header files to install.
 install_feature_headers = [
 	'features/SpectralCentroid.h', 
 	'features/SpectralSparsity.h',
@@ -44,13 +53,13 @@ for i in range(0, len(install_stk_headers)):
 for i in range(0, len(install_headers)):
 	install_headers[i] = source_prefix + install_headers[i]
 
+# Source to compile.
 compile_source = Glob(os.path.join(source_prefix, '*.cpp'))
 compile_source.extend(Glob(os.path.join(source_prefix, 'support/*.cpp')))
 compile_source.extend(Glob(os.path.join(source_prefix, 'features/*.cpp')))
 compile_source.extend(Glob(os.path.join(source_prefix, 'stk/*.cpp')))
 
-AddOption('--prefix', default = '/usr/local', dest = 'prefix', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'installation prefix')
-
+# Create the environment, add necessary flags.
 environment = Environment(CC = 'gcc')
 
 try:
