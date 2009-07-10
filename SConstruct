@@ -17,7 +17,7 @@ elif arch == 'Linux':
 	else:
 		stk_flags = '-D__LINUX_OSS__'
 
-if sys.byteorder == 'little'
+if sys.byteorder == 'little':
 	stk_flags = stk_flags + " -D__LITTLE_ENDIAN__"
 
 # Header files to install.
