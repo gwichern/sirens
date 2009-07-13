@@ -95,7 +95,7 @@ namespace Sirens {
 	}
 	
 	void Sound::close() {
-		file.closeFile();
+		file->closeFile();
 	}
 	
 	void Sound::extractFeatures() {
