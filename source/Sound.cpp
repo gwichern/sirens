@@ -94,6 +94,10 @@ namespace Sirens {
 		file = new FileWvIn(path, false, true, 100000000, 1024);
 	}
 	
+	void Sound::close() {
+		file.closeFile();
+	}
+	
 	void Sound::extractFeatures() {
 		CircularArray sample_array(getSamplesPerFrame());			// Samples of the current frame.
 		CircularArray windowed_array(getSamplesPerFrame(), true);	// Windowed samples of the current frame. Zero-padded for FFT.

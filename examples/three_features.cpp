@@ -37,6 +37,9 @@ int main() {
 	
 	// Extract features.
 	sound->extractFeatures();
+	sound->close();
+	
+	delete sound;
 	
 	// Display feature histories.
 	for (int i = 0; i < sample_features.size(); i++) {
@@ -52,7 +55,6 @@ int main() {
 	cout << endl;
 	
 	// Clean up.
-	delete sound;
 	delete loudness;
 	delete temporal_sparsity;
 	delete spectral_sparsity;

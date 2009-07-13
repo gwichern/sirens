@@ -46,6 +46,7 @@ namespace Sirens {
 		
 		// Sound processing.
 		void open(string path_in);
+		void close();
 		void extractFeatures();
 		void saveFeaturesCSV(string csv_path);
 		
