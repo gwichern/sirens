@@ -179,7 +179,8 @@ StkFloat FileWvIn :: tick( unsigned int channel )
   }
 #endif
 
-  if ( finished_ ) return 0.0;
+  if ( finished_ )
+	return 0.0;
 
   if ( time_ < 0.0 || time_ > (StkFloat) ( file_.fileSize() - 1.0 ) ) {
     for ( unsigned int i=0; i<lastFrame_.size(); i++ ) lastFrame_[i] = 0.0;
@@ -189,7 +190,6 @@ StkFloat FileWvIn :: tick( unsigned int channel )
 
   StkFloat tyme = time_;
   if ( chunking_ ) {
-
     // Check the time address vs. our current buffer limits.
     if ( ( time_ < (StkFloat) chunkPointer_ ) ||
          ( time_ > (StkFloat) ( chunkPointer_ + chunkSize_ - 1 ) ) ) {
@@ -203,11 +203,10 @@ StkFloat FileWvIn :: tick( unsigned int channel )
         if ( chunkPointer_ + chunkSize_ > file_.fileSize() ) // at end of file
           chunkPointer_ = file_.fileSize() - chunkSize_;
       }
-
+		
       // Load more data.
       file_.read( data_, chunkPointer_, normalizing_ );
     }
-
     // Adjust index for the current buffer.
     tyme -= chunkPointer_;
   }

@@ -90,7 +90,7 @@ public:
 
   //! Return the file size in sample frames.
   virtual unsigned long getSize( void ) const { return data_.frames(); };
-
+virtual unsigned long fileSize( void ) const { return file_.fileSize(); }
   //! Return the input file sample rate in Hz (not the data read rate).
   /*!
     WAV, SND, and AIF formatted files specify a sample rate in
