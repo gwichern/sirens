@@ -1,7 +1,7 @@
 #ifndef SPECTRALCENTROID_H
 #define SPECTRALCENTROID_H
 
-#include "Feature.h"
+#include "../Feature.h"
 
 namespace Sirens {
 	class SpectralCentroid : public Feature {

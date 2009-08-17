@@ -1,7 +1,7 @@
 #ifndef TRANSIENTINDEX_H
 #define TRANSIENTINDEX_H
 
-#include "Feature.h"
+#include "../Feature.h"
 
 namespace Sirens {
 	class TransientIndex : public Feature {

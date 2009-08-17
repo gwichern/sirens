@@ -1,7 +1,7 @@
 #ifndef HARMONICITY_H
 #define HARMONICITY_H
 
-#include "Feature.h"
+#include "../Feature.h"
 
 namespace Sirens {
 	struct Peak {
