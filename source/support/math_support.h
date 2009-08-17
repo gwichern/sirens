@@ -26,6 +26,8 @@ namespace Sirens {
 
 	double signal_rms(double* data, int size);
 
+	double lerp(double value, double min, double max);
+	
 	// Perceptual scale conversion.
 	double hz_to_bark(double hz);
 	double bark_to_hz(double bark);

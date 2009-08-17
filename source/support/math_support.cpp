@@ -48,7 +48,7 @@ namespace Sirens {
 			item ++;
 		}
 	
-		return sqrt(sum_of_squares / size);
+		return sqrt(sum_of_squares / (double)size);
 	}
 
 	double hz_to_bark(double hz) {
@@ -74,5 +74,9 @@ namespace Sirens {
 			window[i] = 0.54 - 0.46 * cos((2 * pi * i) / (size - 1));
 	
 		return window;
+	}
+	
+	double lerp(double value, double min, double max) {
+		return (value - min) / (max - min);
 	}
 }
