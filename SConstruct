@@ -31,7 +31,6 @@ install_feature_headers = [
 	'features/TransientIndex.h',
 	'features/Harmonicity.h', 
 	'features/Loudness.h',
-	'features/Feature.h'
 ]
 
 install_stk_headers = [
@@ -43,8 +42,13 @@ install_stk_headers = [
 ]
 
 install_headers = [
+	'SegmentationParameters.h',
 	'CircularArray.h', 
-	'Sound.h'
+	'FeatureSet.h',
+	'Segmenter.h',
+	'Feature.h',
+	'Sound.h',
+	'Sirens.h'
 ]
 
 for i in range(0, len(install_feature_headers)):
@@ -74,6 +78,10 @@ except KeyError:
 environment.Append(PREFIX = GetOption('prefix'))
 
 library = environment.Library('sirens', compile_source) 
+
+all_features_example = environment.Program('examples/all_features', 'examples/all_features.cpp', LIBS = ['sirens', 'fftw3'], LIBPATH = '.')
+segmentation_example = environment.Program('examples/segmentation', 'examples/segmentation.cpp', LIBS = ['sirens', 'fftw3'], LIBPATH = '.')
+
 environment.Install('$PREFIX/lib', library)
 
 environment.Install('$PREFIX/include/sirens', install_headers)
