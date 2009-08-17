@@ -8,7 +8,7 @@ using namespace std;
 #include "stk/FileWvIn.h"
 using namespace stk;
 
-#include "features/Feature.h"
+#include "FeatureSet.h"
 
 namespace Sirens {
 	class Sound {
@@ -18,10 +18,10 @@ namespace Sirens {
 		// File information.
 		string path;
 		FileWvIn* file;
+		long samples;
 		
 		// Features.
-		vector<Feature*> spectralFeatures;
-		vector<Feature*> sampleFeatures;
+		FeatureSet* features;
 		
 	public:
 		Sound();
@@ -48,20 +48,10 @@ namespace Sirens {
 		void open(string path_in);
 		void close();
 		void extractFeatures();
-		void saveFeaturesCSV(string csv_path);
 		
 		// Feature list manipulations.
-		void setSpectralFeatures(vector<Feature*> features);
-		void setSampleFeatures(vector<Feature*> features);
-		
-		vector<Feature*> getSpectralFeatures();
-		vector<Feature*> getSampleFeatures();
-		
-		void addSpectralFeature(Feature* feature);
-		void addSampleFeature(Feature* feature);
-		
-		void clearSpectralFeatures();
-		void clearSampleFeatures();
+		FeatureSet* getFeatures();
+		void setFeatures(FeatureSet* new_features);
 	};
 }
 

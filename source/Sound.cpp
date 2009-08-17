@@ -1,8 +1,5 @@
 #include "Sound.h"
 
-#include <fstream>
-using namespace std;
-
 #include "FFT.h"
 #include "CircularArray.h"
 #include "support/math_support.h"
@@ -40,7 +37,7 @@ namespace Sirens {
 	}
 	
 	int Sound::getSampleCount() {
-		return file->getSize();
+		return file->fileSize();
 	}
 	
 	int Sound::getSamplesPerFrame() {
@@ -91,7 +88,12 @@ namespace Sirens {
 	void Sound::open(string path_in) {
 		path = path_in;
 		
-		file = new FileWvIn(path, false, true, 100000000, 1024);
+		file = new FileWvIn(path, false, true);
+		
+		while(file->tick())
+			samples++;
+		
+		file->reset();
 	}
 	
 	void Sound::close() {
@@ -109,15 +111,14 @@ namespace Sirens {
 		double* window = create_hamming_window(getSamplesPerFrame());
 		
 		// Add each sample to the circular buffer.
-		for (int i = 0; i < getSampleCount(); i++) {						
+		for (int i = 0; i < getSampleCount(); i++) {
 			// Calculate if we are at a new frame.
 			if ((i % getSamplesPerHop()) == 0 && sample_array.getSize() >= getSamplesPerFrame()) {	
-				// Loudness-based features.
-				for (unsigned int j = 0; j < sampleFeatures.size(); j++)
-					sampleFeatures[j]->calculate(&sample_array);
-				
-				for (unsigned int j = 0; j < sampleFeatures.size(); j++)
-					sampleFeatures[j]->waitForCompletion();
+				if (((i / getSamplesPerHop()) % 1000) == 0)
+					cout << "Frame " << i / getSamplesPerHop() << endl;
+					
+				// Calculate sample features that don't need FFT.
+				features->calculateSampleFeatures(&sample_array);
 				
 				// FFT.
 				for (int j = 0; j < getSamplesPerFrame(); j++)
@@ -128,12 +129,8 @@ namespace Sirens {
 				for (int j = 0; j < fft.getOutputSize(); j++)
 					spectrum_array.addValue(sqrt(fft.getOutput()[j][0] * fft.getOutput()[j][0] + fft.getOutput()[j][1] * fft.getOutput()[j][1]));
 				
-				// Spectral and cepstral features.
-				for (unsigned int j = 0; j < spectralFeatures.size(); j++)
-					spectralFeatures[j]->calculate(&spectrum_array);
-				
-				for (unsigned int j = 0; j < spectralFeatures.size(); j++)
-					spectralFeatures[j]->waitForCompletion();
+				// Calculate spectral features.
+				features->calculateSpectralFeatures(&spectrum_array);
 			}
 			
 			// Add the sample to the buffer.
@@ -144,54 +141,11 @@ namespace Sirens {
 		delete [] window;
 	}
 	
-	void Sound::saveFeaturesCSV(string csv_path) {
-		fstream file(csv_path.c_str(), ios::out);
-		
-		for (int i = 2; i < getFrameCount(); i++) {
-			for (unsigned int j = 0; j < sampleFeatures.size(); j++)
-				file << sampleFeatures[j]->getHistory()->getData()[i] << ",";
-				
-			for (unsigned int j = 0; j < spectralFeatures.size(); j++)
-				file << spectralFeatures[j]->getHistory()->getData()[i] << ",";
-			
-			file << i << endl;
-		}
-		
-		file.close();
-	}
-	/*
-	 * Feature list manipulations.
-	 */
-	
-	void Sound::setSpectralFeatures(vector<Feature*> features) {
-		spectralFeatures = features;
+	FeatureSet* Sound::getFeatures() {
+		return features;
 	}
 	
-	void Sound::setSampleFeatures(vector<Feature*> features) {
-		sampleFeatures = features;
-	}
-	
-	void Sound::addSpectralFeature(Feature* feature) {
-		spectralFeatures.push_back(feature);
-	}
-	
-	void Sound::addSampleFeature(Feature* feature) {
-		sampleFeatures.push_back(feature);
-	}
-	
-	void Sound::clearSpectralFeatures() {
-		spectralFeatures.clear();
-	}
-	
-	void Sound::clearSampleFeatures() {
-		sampleFeatures.clear();
-	}
-	
-	vector<Feature*> Sound::getSpectralFeatures() {
-		return spectralFeatures;
-	}
-	
-	vector<Feature*> Sound::getSampleFeatures() {
-		return sampleFeatures;
+	void Sound::setFeatures(FeatureSet* new_features) {
+		features = new_features;
 	}
 }
