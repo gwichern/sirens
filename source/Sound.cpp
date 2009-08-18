@@ -9,24 +9,56 @@ namespace Sirens {
 		frameLength = 0.04;
 		hopLength = 0.02;
 		
+		soundFile = NULL;
 		path = "";
 	}
 	
 	Sound::Sound(string path_in) {
 		frameLength = 0.04;
 		hopLength = 0.02;
+		soundFile = NULL;
 		
 		open(path_in);
 	}
 	
 	Sound::~Sound() {
-		file->closeFile();
-		delete file;
+		close();
 	}
 	
 	/*
-	 * Sound information.
+	 * IO
 	 */
+	
+	void Sound::open(string path_in) {
+		path = path_in;
+		
+		if (!(soundFile = sf_open(path.c_str(), SFM_READ, &soundInfo))) {
+			// Error;
+		}
+	}
+	
+	void Sound::close() {
+		if (soundFile != NULL) {
+			sf_close(soundFile);
+			soundFile = NULL;
+		}
+	}
+	
+	/*
+	 * Basic sound information.
+	 */
+	
+	int Sound::getSampleCount() {
+		return soundInfo.frames;
+	}
+
+	int Sound::getSampleRate() {
+		return soundInfo.samplerate;
+	}
+
+	int Sound::getChannels() {
+		return soundInfo.channels;
+	}
 	
 	double Sound::getHopLength() {
 		return hopLength;
@@ -36,9 +68,21 @@ namespace Sirens {
 		return frameLength;
 	}
 	
-	int Sound::getSampleCount() {
-		return file->fileSize();
+	void Sound::setHopLength(double hop_length) {
+		hopLength = hop_length;
 	}
+	
+	void Sound::setFrameLength(double frame_length) {
+		frameLength = frame_length;
+	}
+	
+	string Sound::getPath() {
+		return path;
+	}
+	
+	/*
+	 * Calculated sound information.
+	 */
 	
 	int Sound::getSamplesPerFrame() {
 		return int(frameLength * double(getSampleRate()));
@@ -57,10 +101,6 @@ namespace Sirens {
 		return frames;
 	}
 	
-	int Sound::getSampleRate() {
-		return int(file->getFileRate());
-	}
-	
 	int Sound::getFFTSize() {
 		return next_pow(getSamplesPerFrame(), 2);
 	}
@@ -69,35 +109,16 @@ namespace Sirens {
 		return getFFTSize() / 2 + 1;
 	}
 	
-	void Sound::setHopLength(double hop_length) {
-		hopLength = hop_length;
-	}
-	
-	void Sound::setFrameLength(double frame_length) {
-		frameLength = frame_length;
-	}
-	
-	string Sound::getPath() {
-		return path;
-	}
-	
 	/*
-	 * Sound processing.
+	 * Features.
 	 */
 	
-	void Sound::open(string path_in) {
-		path = path_in;
-		
-		file = new FileWvIn(path, false, true);
-		
-		while(file->tick())
-			samples++;
-		
-		file->reset();
+	FeatureSet* Sound::getFeatures() {
+		return features;
 	}
 	
-	void Sound::close() {
-		file->closeFile();
+	void Sound::setFeatures(FeatureSet* new_features) {
+		features = new_features;
 	}
 	
 	void Sound::extractFeatures() {
@@ -111,41 +132,42 @@ namespace Sirens {
 		double* window = create_hamming_window(getSamplesPerFrame());
 		
 		// Add each sample to the circular buffer.
-		for (int i = 0; i < getSampleCount(); i++) {
-			// Calculate if we are at a new frame.
-			if ((i % getSamplesPerHop()) == 0 && sample_array.getSize() >= getSamplesPerFrame()) {	
-				if (((i / getSamplesPerHop()) % 1000) == 0)
-					cout << "Frame " << i / getSamplesPerHop() << endl;
-					
+		int readcount;
+ 		long frame_number = 0;
+		int samples_per_hop = getSamplesPerHop();
+		double* new_samples = new double[samples_per_hop];
+		
+		while (readcount = sf_read_double(soundFile, new_samples, samples_per_hop)) {
+			for (int i = 0; i < samples_per_hop; i++)
+				sample_array.addValue(new_samples[i]);
+			
+			// The first hop or two will not necessarily be a full frame's worth of data.
+			if (sample_array.getSize() == sample_array.getMaxSize()) {
+				if (frame_number % 1000 == 0)
+					cout << "Frame " << frame_number << endl;
+			
 				// Calculate sample features that don't need FFT.
 				features->calculateSampleFeatures(&sample_array);
 				
 				// FFT.
 				for (int j = 0; j < getSamplesPerFrame(); j++)
 					windowed_array.addValue(sample_array.getValueAt(j) * window[j]);
-				
+			
 				fft.calculate();
-								
+							
 				for (int j = 0; j < fft.getOutputSize(); j++)
-					spectrum_array.addValue(sqrt(fft.getOutput()[j][0] * fft.getOutput()[j][0] + fft.getOutput()[j][1] * fft.getOutput()[j][1]));
+					spectrum_array.addValue(abs(fft.getOutput()[j][0]));
+					//spectrum_array.addValue(sqrt(fft.getOutput()[j][0] * fft.getOutput()[j][0] + fft.getOutput()[j][1] * fft.getOutput()[j][1]));
 				
 				// Calculate spectral features.
 				features->calculateSpectralFeatures(&spectrum_array);
-			}
 			
-			// Add the sample to the buffer.
-			sample_array.addValue(file->tick());
+				frame_number = frame_number + 1;
+			}
 		}
 		
 		// Cleanup.
+		delete [] new_samples;
 		delete [] window;
-	}
-	
-	FeatureSet* Sound::getFeatures() {
-		return features;
-	}
-	
-	void Sound::setFeatures(FeatureSet* new_features) {
-		features = new_features;
 	}
 }

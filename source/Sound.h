@@ -5,8 +5,7 @@
 #include <string>
 using namespace std;
 
-#include "stk/FileWvIn.h"
-using namespace stk;
+#include <sndfile.h>
 
 #include "FeatureSet.h"
 
@@ -15,12 +14,10 @@ namespace Sirens {
 	protected:
 		double hopLength, frameLength;
 		
-		// File information.
 		string path;
-		FileWvIn* file;
-		long samples;
+		SNDFILE* soundFile;
+		SF_INFO soundInfo;
 		
-		// Features.
 		FeatureSet* features;
 		
 	public:
@@ -28,30 +25,31 @@ namespace Sirens {
 		Sound(string path_in);
 		~Sound();
 		
-		// Sound information.
+		// I/O.
+		void open(string path_in);
+		void close();
+		
+		// Basic sound information.
+		int getSampleCount();
+		int getSampleRate();
+		int getChannels();
 		double getHopLength();
 		double getFrameLength();
-		
-		int getSampleCount();
+		void setHopLength(double hop_length);
+		void setFrameLength(double frame_length);
+		string getPath();
+				
+		// Calculated sound information.
 		int getSamplesPerFrame();
 		int getSamplesPerHop();
 		int getFrameCount();
-		int getSampleRate();
 		int getFFTSize();
 		int getSpectrumSize();
-		string getPath();
 		
-		void setHopLength(double hop_length);
-		void setFrameLength(double frame_length);
-		
-		// Sound processing.
-		void open(string path_in);
-		void close();
-		void extractFeatures();
-		
-		// Feature list manipulations.
+		// Features.
 		FeatureSet* getFeatures();
 		void setFeatures(FeatureSet* new_features);
+		void extractFeatures();		
 	};
 }
 
