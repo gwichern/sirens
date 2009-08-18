@@ -235,7 +235,6 @@ namespace Sirens {
 				newPsi[i].erase(newPsi[i].begin());
 			
 			newPsi[i].push_back(newBeams[i]->oldMode);
-
 		}
 		
 		if (newPsi[0].size() > 50)
@@ -311,6 +310,10 @@ namespace Sirens {
 		
 		initialize();
 		
+		// true: start, false: stop
+		bool last_signal = true;
+		starts.push_back(0);
+		
 		for (int i = 0; i < feature_set->getMinHistorySize(); i++) {
 			if ((i % 1000) == 0)
 				cout << "Frame " << i << endl;
@@ -319,31 +322,45 @@ namespace Sirens {
 				y[j] = features[j]->getHistoryFrame(i);
 			
 			beamSearch();
-			
-			if (start)
+						
+			if (start) {
+				if (last_signal)
+					stops.push_back(i);
+				
 				starts.push_back(i);
 				
-			if (stop)
-				stops.push_back(i);
-		}
+				last_signal = true;
+			}
 			
+			if (stop) {
+				if (last_signal)
+					stops.push_back(i);
+				
+				last_signal = false;
+			}
+		}
+		
+		// If there is a final, unstopped segmented, implicitly stop it at the end of the sound.
+		if (starts.size() > stops.size())
+			stops.push_back(feature_set->getMinHistorySize() - 1);
+		
+		for (int i = 0; i < starts.size(); i++)
+			cout << starts[i] << " ";
+		cout << endl;
+		for (int i = 0; i < stops.size(); i++)
+			cout << stops[i] << " ";
+		cout << endl;
+		
+		// Segments are between starts and stops.
 		while (starts.size() > 0 && stops.size() > 0) {
 			vector<double> segment(2);
 			segment[0] = starts.front();
-			segment[1] = stops.front() - segment[0];
+			segment[1] = stops.front();
 			
 			starts.erase(starts.begin());
 			stops.erase(stops.begin());
 			
 			segments.push_back(segment);
-		}
-		
-		if (starts.size() > 0) {
-			vector<double> segment(2);
-			segment[0] = starts.front();
-			segment[1] = (history_size - 1) - segment[0];
-			
-			starts.erase(starts.begin());
 		}
 		
 		return segments;
