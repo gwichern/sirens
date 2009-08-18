@@ -4,7 +4,8 @@ source_prefix = 'source/'
 
 # Prefix option for alternate install path.
 AddOption('--prefix', default = '/usr/local', dest = 'prefix', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'installation prefix')
-AddOption('--shared', dest='shared', type = 'string', nargs = 0, action = 'store', help = 'use to build shared library')
+AddOption('--shared', action = 'store_true', dest = 'shared', help = 'use to build a shared library')
+AddOption('--debug-symbols', action = 'store_true', dest = 'debug_symbols', help = 'build in debug symbols')
 
 # STK macros.
 stk_flags = ""
@@ -22,6 +23,10 @@ else:
 	
 		if sys.byteorder == 'little':
 			stk_flags = stk_flags + " -D__LITTLE_ENDIAN__"
+
+other_flags = ''
+if GetOption('debug_symbols'):
+	other_flags = '-g'
 
 # Header files to install.
 install_feature_headers = [
@@ -70,17 +75,17 @@ compile_source.extend(Glob(os.path.join(source_prefix, 'stk/*.cpp')))
 environment = Environment(CC = 'gcc')
 
 try:
-	environment.Append(CPPFLAGS = os.environ['CPPFLAGS'] + ' '+ stk_flags)
+	environment.Append(CPPFLAGS = os.environ['CPPFLAGS'] + ' '+ stk_flags + ' ' + other_flags)
 	print "Using CPPFLAGS: " + os.environ['CPPFLAGS']
 except KeyError:
-	environment.Append(CPPFLAGS = stk_flags)
+	environment.Append(CPPFLAGS = stk_flags + ' ' + other_flags)
 
 environment.Append(PREFIX = GetOption('prefix'))
 
 library = environment.Library('sirens', compile_source) 
 
-all_features_example = environment.Program('examples/all_features', 'examples/all_features.cpp', LIBS = ['sirens', 'fftw3'], LIBPATH = '.')
-segmentation_example = environment.Program('examples/segmentation', 'examples/segmentation.cpp', LIBS = ['sirens', 'fftw3'], LIBPATH = '.')
+all_features_example = environment.Program('examples/all_features', 'examples/all_features.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
+segmentation_example = environment.Program('examples/segmentation', 'examples/segmentation.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
 
 environment.Install('$PREFIX/lib', library)
 
