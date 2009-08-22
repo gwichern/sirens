@@ -13,7 +13,7 @@ int main() {
 	
 	// Initialize features.
 	Loudness* loudness = new Loudness(sound->getFrameCount());
-	TransientIndex* transient_index = new TransientIndex(sound->getFrameCount(), sound->getSpectrumSize(), sound->getSampleRate(), 15, 30);
+	TransientIndex* transient_index = new TransientIndex(sound->getFrameCount(), sound->getSpectrumSize(), sound->getSampleRate(), 30, 15);
 	TemporalSparsity* temporal_sparsity = new TemporalSparsity(sound->getFrameCount(), 50);
 	SpectralSparsity* spectral_sparsity = new SpectralSparsity(sound->getFrameCount());
 	SpectralCentroid* spectral_centroid = new SpectralCentroid(sound->getFrameCount(), sound->getSpectrumSize(), sound->getSampleRate());
