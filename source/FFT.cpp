@@ -3,13 +3,13 @@
 namespace Sirens {
 	FFT::FFT(int fft_size, double* input) {
 		fftSize = fft_size;
-		
-		output = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * getOutputSize());		
+		output = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * getOutputSize());
 		plan = fftw_plan_dft_r2c_1d(getInputSize(), input, output, FFTW_ESTIMATE);
 	}
 	
 	FFT::~FFT() {
 		fftw_free(output);
+		fftw_destroy_plan(plan);
 	}
 	
 	void FFT::calculate() {

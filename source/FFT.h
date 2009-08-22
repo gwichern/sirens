@@ -8,7 +8,6 @@ namespace Sirens {
 	private:
 		fftw_complex* output;
 		fftw_plan plan;
-		
 		int fftSize;
 		
 	public:
