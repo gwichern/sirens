@@ -8,6 +8,8 @@
  */
 
 #include <sstream>
+#include <fstream>
+#include <iostream>
 using namespace std;
 
 #include "string_support.h"
@@ -35,5 +37,22 @@ namespace Sirens {
 		stringstream ss;
 		ss << data;
 		return ss.str();
+	}
+	
+	void write_csv_file(string path, vector<vector<double> > input) {
+		fstream file(path.c_str(), ios::out);
+		
+		for (int i = 0; i < input.size(); i++) {
+			for (int j = 0; j < input[i].size(); j++) {
+				file << input[i][j];
+				
+				if (j < input[i].size() - 1)
+					file << ",";
+			}
+			
+			file << endl;
+		}
+		
+		file.close();
 	}
 }
