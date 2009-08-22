@@ -14,7 +14,7 @@
 using namespace std;
 
 namespace Sirens { 
-	const double pi = 4 * asin(1.0);
+	const double pi = 2 * asin(1.0);
 	
 	// General math functions.
 	int minimum(int a, int b);
