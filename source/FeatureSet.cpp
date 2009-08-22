@@ -1,7 +1,6 @@
 #include "FeatureSet.h"
 
-#include <fstream>
-using namespace std;
+#include "support/string_support.h"
 
 namespace Sirens {
 	void FeatureSet::addSampleFeature(Feature* feature) {
@@ -48,18 +47,20 @@ namespace Sirens {
 	}
 	
 	void FeatureSet::saveCSV(string csv_path) {
-		fstream file(csv_path.c_str(), ios::out);
+		vector<vector<double> > trajectories;
 		
 		vector<Feature*> features = getFeatures();
 		
-		for (int i = 0; i < getMinHistorySize(); i++) {
+		for (int i = 1; i < getMinHistorySize(); i++) {
+			vector<double> row;
+			
 			for (unsigned int j = 0; j < features.size(); j++)
-				file << features[j]->getHistoryFrame(i) << ",";
-	
-			file << i << endl;
+				row.push_back(features[j]->getHistoryFrame(i));
+			
+			trajectories.push_back(row);
 		}
-
-		file.close();
+		
+		write_csv_file(csv_path, trajectories);
 	}
 
 	void FeatureSet::calculateSampleFeatures(CircularArray* sample_array) {	
@@ -73,7 +74,7 @@ namespace Sirens {
 	void FeatureSet::calculateSpectralFeatures(CircularArray* spectrum_array) {
 		for (unsigned int j = 0; j < spectralFeatures.size(); j++)
 			spectralFeatures[j]->calculate(spectrum_array);
-	
+		
 		for (unsigned int j = 0; j < spectralFeatures.size(); j++)
 			spectralFeatures[j]->waitForCompletion();
 	}
