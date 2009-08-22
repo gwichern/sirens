@@ -46,25 +46,25 @@ namespace Sirens {
 		dctMatrix = new double[filters * mels];
 		filterBank = new double[filters * spectrumSize];
 		filterTemp = new double[filters];
-	
+		
 		mfccNew = new double[mels];
 		mfccOld = new double[mels];
 	
 		// Initialisation
 		double min_mel = hz_to_mel(50.0);
-		double max_mel = hz_to_mel(sampleRate / 2.0);
-	
+		double max_mel = hz_to_mel(sampleRate / 2);
+		
 		double* filter_values = new double[spectrumSize];
 		double* filter_centers = new double[filters + 2];
-	
+		
 		for (int i = 0; i < spectrumSize; i++)
 			filter_values[i] = double(sampleRate * i) / double(2 * (spectrumSize - 1));
-
+		
 		for (int i = 0; i < mels; i++) {
 			for (int j = 0; j < filters; j++)
 				dctMatrix[i * filters + j] = cos((i + 1) * (PI / filters * (j + 0.5)));
 		}
-	
+		
 		for (int i = 0; i < filters + 2; i++)
 			filter_centers[i] = mel_to_hz(min_mel + ((max_mel - min_mel) / (filters + 1)) * i);
 		

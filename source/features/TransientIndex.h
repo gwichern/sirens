@@ -18,7 +18,7 @@ namespace Sirens {
 		void initialize();
 		
 	public:
-		TransientIndex(int history_size = 1, int spectrum_size = 1024, int sample_rate = 44100, int in_filters = 15, int in_mels = 30);
+		TransientIndex(int history_size = 1, int spectrum_size = 1024, int sample_rate = 44100, int in_filters = 30, int in_mels = 15);
 		~TransientIndex();
 		
 		void setSpectrumSize(int spectrum_size);
