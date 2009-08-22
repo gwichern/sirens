@@ -31,6 +31,7 @@ namespace Sirens {
 		int searchRegionLength, searchRegionLength2;
 		int maxPeaks, nMax;
 		int sampleRate, spectrumSize;
+		int fftSize;
 		
 		double kVar;
 		
@@ -47,7 +48,7 @@ namespace Sirens {
 		double lpfCoefficient;
 		double filterOldValue;
 
-		void peakPick();
+		void pickPeaks();
 		double goldsteinGaussian(double x1, double x2, int n1, int n2, double f0, double k);
 		void goldsteinCalc();
 		
