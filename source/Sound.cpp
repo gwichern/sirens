@@ -3,6 +3,7 @@
 #include "FFT.h"
 #include "CircularArray.h"
 #include "support/math_support.h"
+#include "support/string_support.h"
 
 namespace Sirens {
 	Sound::Sound() {
@@ -136,7 +137,7 @@ namespace Sirens {
  		long frame_number = 0;
 		int samples_per_hop = getSamplesPerHop();
 		double* new_samples = new double[samples_per_hop];
-		
+				
 		while (readcount = sf_read_double(soundFile, new_samples, samples_per_hop)) {
 			for (int i = 0; i < samples_per_hop; i++)
 				sample_array.addValue(new_samples[i]);
@@ -145,23 +146,26 @@ namespace Sirens {
 			if (sample_array.getSize() == sample_array.getMaxSize()) {
 				if (frame_number % 1000 == 0)
 					cout << "Frame " << frame_number << endl;
-			
+				
 				// Calculate sample features that don't need FFT.
 				features->calculateSampleFeatures(&sample_array);
 				
 				// FFT.
-				for (int j = 0; j < getSamplesPerFrame(); j++)
-					windowed_array.addValue(sample_array.getValueAt(j) * window[j]);
-			
+				for (int i = 0; i < getSamplesPerFrame(); i++)
+					windowed_array.addValue(sample_array.getValueAt(i) * window[i]);
+				
 				fft.calculate();
-							
-				for (int j = 0; j < fft.getOutputSize(); j++)
-					spectrum_array.addValue(abs(fft.getOutput()[j][0]));
-					//spectrum_array.addValue(sqrt(fft.getOutput()[j][0] * fft.getOutput()[j][0] + fft.getOutput()[j][1] * fft.getOutput()[j][1]));
+				
+				for (int i = 0; i < fft.getOutputSize(); i++) {					
+					double first = fft.getOutput()[i][0];
+					double second = fft.getOutput()[i][1];
+					
+					spectrum_array.addValue(sqrt(first * first + second * second));
+				}
 				
 				// Calculate spectral features.
 				features->calculateSpectralFeatures(&spectrum_array);
-			
+				
 				frame_number = frame_number + 1;
 			}
 		}
