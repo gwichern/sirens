@@ -12,7 +12,7 @@ using namespace stk;
 
 // No need for a mutex, since we are guaranteed to only access data when thread is complete.
 namespace Sirens {
-	class Feature {
+	class Feature : Thread {
 	private:
 		Thread thread;
 		
