@@ -2,6 +2,7 @@
 #define CIRCULARARRAY_H
 
 #include <string>
+#include <>
 using namespace std;
 
 namespace Sirens {

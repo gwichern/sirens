@@ -17,7 +17,7 @@ namespace Sirens {
 		
 		data = new double[allocatedSize];
 		
-		for (int i = maxSize; i < allocatedSize; i++)
+		for (int i = 0; i < allocatedSize; i++)
 			data[i] = 0;
 	}
 
