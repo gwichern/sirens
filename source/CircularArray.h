@@ -2,28 +2,39 @@
 #define CIRCULARARRAY_H
 
 #include <string>
-#include <>
 using namespace std;
 
+#include <pthread.h>
+
+// Circular array allows values to be added and simply replace older values if the maximum size is reached.
 namespace Sirens {
 	class CircularArray {
-	private:
+	private:		
 		double* data;
-		int size, maxSize, allocatedSize, start, index;
+		
+		int size;											// Current size of the array.
+		int maxSize;										// Maximum size before wrapping to the front of the array.
+		int allocatedSize;									// Total space allocated for the array (>= maxSize), for zero-padding.
+		int start;											// Pointer to the start of the array. Not always zero.
+		int index;											// Pointer to the last element of the array.
 		
 	public:
-		CircularArray(int max_size, bool pad_next_power = false);
+		CircularArray(int max_size);
 		~CircularArray();
 		
 		void addValue(double value);
 		
-		double* getData();
 		int getSize();
 		int getMaxSize();
 		int getStart();
 		int getIndex();
 		
-		double getValueAt(int offset);
+		double getUnorderedValue(int offset);
+		double getValue(int offset);
+		
+		double* getData() {
+			return data;
+		}
 		
 		string toString();
 	};

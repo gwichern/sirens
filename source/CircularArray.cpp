@@ -4,20 +4,15 @@
 #include "support/string_support.h"
 
 namespace Sirens {
-	CircularArray::CircularArray(int max_size, bool pad_next_power) {
+	CircularArray::CircularArray(int max_size) {
 		start = 0;
 		size = 0;
 		index = 0;
 		maxSize = max_size;
+		 
+		data = new double[maxSize];
 		
-		if (!pad_next_power)
-			allocatedSize = maxSize;
-		else
-			allocatedSize = next_pow(maxSize, 2);
-		
-		data = new double[allocatedSize];
-		
-		for (int i = 0; i < allocatedSize; i++)
+		for (int i = 0; i < maxSize; i++)
 			data[i] = 0;
 	}
 
@@ -25,7 +20,7 @@ namespace Sirens {
 		delete [] data;
 	}
 	
-	void CircularArray::addValue(double value) {		
+	void CircularArray::addValue(double value) {	
 		data[index] = value;
 		
 		if (size == maxSize)
@@ -35,41 +30,58 @@ namespace Sirens {
 		
 		index = (index + 1) % maxSize;
 	}
-
-	double* CircularArray::getData() {
-		return data;
-	}
 	
 	int CircularArray::getSize() {
-		return size;
+		int return_value = -1;
+		
+		return_value = size;
+		
+		return return_value;
 	}
 	
 	int CircularArray::getMaxSize() {
-		return maxSize;
+		int return_value = -1;
+		
+		return_value = maxSize;
+		
+		return return_value;
 	}
 	
 	int CircularArray::getStart() {
-		return start;
+		int return_value = -1;
+		
+		return_value = start;
+		
+		return return_value;
 	}
 	
 	int CircularArray::getIndex() {
-		return index;
+		int return_value = -1;
+		
+		return_value = index;
+		
+		return return_value;
 	}
 	
-	double CircularArray::getValueAt(int offset) {
-		return data[(start + offset) % maxSize];
+	double CircularArray::getValue(int offset) {
+		double return_value = -1;
+		
+		return_value = data[(start + offset) % maxSize];
+		
+		return return_value;
 	}
 	
 	string CircularArray::toString() {
-		string history_string = 
-			"Allocated size: " + double_to_string(allocatedSize) + 
-			", Max size: " + double_to_string(maxSize) + 
+		string history_string;
+				
+		history_string = 
+			"Max size: " + double_to_string(maxSize) + 
 			", Size: " + double_to_string(size) + 
 			", Start: " + double_to_string(start) + "\n\t";
 		
 		for (int i = 0; i < size; i++)
 			history_string += double_to_string(data[i]) + " ";
-		
+				
 		return history_string;
 	}
 }
