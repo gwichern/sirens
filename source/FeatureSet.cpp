@@ -3,6 +3,16 @@
 #include "support/string_support.h"
 
 namespace Sirens {
+	void FeatureSet::startFeatures() {
+		for (int i = 0; i < features.size(); i++)
+			features[i]->start();
+	}
+	
+	void FeatureSet::stopFeatures() {
+		for (int i = 0; i < features.size(); i++)
+			features[i]->stop();
+	}
+	
 	void FeatureSet::addSampleFeature(Feature* feature) {
 		sampleFeatures.push_back(feature);
 		features.push_back(feature);
@@ -51,7 +61,7 @@ namespace Sirens {
 		
 		vector<Feature*> features = getFeatures();
 		
-		for (int i = 1; i < getMinHistorySize(); i++) {
+		for (int i = 0; i < getMinHistorySize() - 1; i++) {
 			vector<double> row;
 			
 			for (unsigned int j = 0; j < features.size(); j++)
