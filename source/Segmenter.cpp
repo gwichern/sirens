@@ -1,5 +1,6 @@
 #include "Segmenter.h"
 
+#include <iostream>
 #include <cmath>
 using namespace std;
 
@@ -306,8 +307,6 @@ namespace Sirens {
 		vector<double> stops;
 		vector<vector<double> > segments;
 		
-		int history_size = -1;
-		
 		initialize();
 		
 		// true: start, false: stop
@@ -343,13 +342,6 @@ namespace Sirens {
 		// If there is a final, unstopped segmented, implicitly stop it at the end of the sound.
 		if (starts.size() > stops.size())
 			stops.push_back(feature_set->getMinHistorySize() - 1);
-		
-		for (int i = 0; i < starts.size(); i++)
-			cout << starts[i] << " ";
-		cout << endl;
-		for (int i = 0; i < stops.size(); i++)
-			cout << stops[i] << " ";
-		cout << endl;
 		
 		// Segments are between starts and stops.
 		while (starts.size() > 0 && stops.size() > 0) {
