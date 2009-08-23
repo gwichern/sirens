@@ -18,7 +18,7 @@ namespace Sirens {
 				
 		if (rmsWindow) {
 			for (int i = 0; i < rmsWindow->getSize(); i++)
-				new_window->addValue(rmsWindow->getValueAt(i));
+				new_window->addValue(rmsWindow->getValue(i));
 			
 			delete rmsWindow;
 		}
@@ -31,23 +31,24 @@ namespace Sirens {
 	}
 	
 	void TemporalSparsity::performCalculation() {
-		double rms = signal_rms(input->getData(), input->getSize());
+		double rms = signal_rms(input);
 		
 		rmsWindow->addValue(rms);
-	
+		
 		if (rmsWindow->getSize() >= rmsWindow->getMaxSize()) {
 			double max = 0;
 			double sum = 0;
 			
-			double* input_item = rmsWindow->getData();
+			double* rms_item = rmsWindow->getData();
+			int rms_size = rmsWindow->getSize();
 			
-			for (int i = 0; i < rmsWindow->getSize(); i++) {
-				max = maximum(max, (*input_item));
-				sum += (*input_item);
+			for (int i = 0; i < rms_size; i++) {
+				max = maximum(max, (*rms_item));
+				sum += (*rms_item);
 				
-				input_item ++;
+				rms_item ++;
 			}
-		
+			
 			value = max / sum;
 		
 		} else

@@ -137,9 +137,13 @@ namespace Sirens {
 		// Calculate the MFCC vector for the current frame.
 		for (int i = 0; i < filters; i++) {
 			filterTemp[i] = 0;
-		
-			for (int j = 0; j < spectrum_size; j++)
-				filterTemp[i] += filterBank[(i * spectrum_size) + j] * input->getValueAt(j);
+			
+			double* input_item = input->getData();
+			
+			for (int j = 0; j < spectrum_size; j++) {
+				filterTemp[i] += filterBank[(i * spectrum_size) + j] * (*input_item);
+				input_item ++;
+			}
 			
 			filterTemp[i] = (filterTemp[i] > 0) ? log(filterTemp[i]) : 0;
 		}

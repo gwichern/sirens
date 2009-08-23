@@ -10,10 +10,10 @@ namespace Sirens {
 		double max = 0;
 		double sum = 0;
 		
+		int input_size = input->getSize();
 		double* input_item = input->getData();
-		int size = input->getSize();
 		
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < input_size; i++) {
 			max = maximum((*input_item), max);
 			sum += (*input_item);
 			

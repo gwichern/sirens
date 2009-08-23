@@ -7,7 +7,7 @@ using namespace std;
 
 namespace Sirens {
 	void Loudness::performCalculation() {
-		value = 20 * log10(signal_rms(input->getData(), input->getSize()));
+		value = 20 * log10(signal_rms(input));
 	}
 
 	string Loudness::toString() {

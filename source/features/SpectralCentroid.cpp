@@ -61,30 +61,29 @@ namespace Sirens {
 	void SpectralCentroid::performCalculation() {
 		double sum = 0;
 		value = 0;
-	
+		
 		int size = input->getSize();
-	
-		double* input_item = input->getData() + 1;
 		double* weight_item = barkWeights;
-				
+		double* input_item = input->getData() + 1;
+		
 		for (int i = 1; i < size; i++) {
 			sum += (*input_item) * (*input_item) * (*weight_item);
 			
-			input_item ++;
 			weight_item ++;
+			input_item ++;
 		}
 		
-		input_item = input->getData() + 1;
 		weight_item = barkWeights;
 		double* unit_item = barkUnits + 1;
+		input_item = input->getData() + 1;
 		
 		for (int i = 1; i < size; i++) {
 			value += (*input_item) * (*input_item) * ((*weight_item) / sum) * (*unit_item);
 			
-			input_item ++; 
 			unit_item ++; 
 			weight_item ++;
-		}
+			input_item ++;
+		}		
 	}
 
 	string SpectralCentroid::toString() {

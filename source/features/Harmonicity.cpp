@@ -152,15 +152,15 @@ namespace Sirens {
 			double maxel = 0;
 			
 			for (int i = k - searchRegionLength2; i <= k + searchRegionLength2; i++) {
-				if (maxel < input->getValueAt(i))
-					maxel = input->getValueAt(i);
+				if (maxel < input->getValue(i))
+					maxel = input->getValue(i);
 			}
 			
 			// Save the bin with the maximum amplitude in the search region.
-			if (input->getValueAt(k) >= maxel) {
+			if (input->getValue(k) >= maxel) {
 				rawIndices.values[rawIndices.size] = k;
 				rawIndices.size ++;
-				rawMagnitudes.values[rawMagnitudes.size] = input->getValueAt(k);
+				rawMagnitudes.values[rawMagnitudes.size] = input->getValue(k);
 				rawMagnitudes.size ++;
 			}
 		}
@@ -176,7 +176,7 @@ namespace Sirens {
 		// Accept only frequency bins where the amplitudes threshold is greater than the absolute threshold 
 		// and threshold relative to the maximum amplitude.
 		for (int k = 0; k < rawIndices.size; k++) {
-			if ((input->getValueAt(rawIndices.values[k]) > threshold * max_peak_mag) && (input->getValueAt(rawIndices.values[k]) > absThreshold)) {
+			if ((input->getValue(rawIndices.values[k]) > threshold * max_peak_mag) && (input->getValue(rawIndices.values[k]) > absThreshold)) {
 				accIndices.values[accIndices.size] = rawIndices.values[k];
 				accIndices.size ++;
 			}
@@ -187,9 +187,9 @@ namespace Sirens {
 			int ind = accIndices.values[k];
 			
 			// Get surrounding amplitudes.
-			double y1 = log(input->getValueAt(ind - 1));
-			double y2 = log(input->getValueAt(ind));
-			double y3 = log(input->getValueAt(ind + 1));
+			double y1 = log(input->getValue(ind - 1));
+			double y2 = log(input->getValue(ind));
+			double y3 = log(input->getValue(ind + 1));
 			
 			double freq_bin_zero = (y1 - y3) / (2 * (y1 - 2 * y2 + y3));
 			
