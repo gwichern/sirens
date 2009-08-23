@@ -13,8 +13,10 @@
 #include <cmath>
 using namespace std;
 
+#include "../CircularArray.h"
+
 namespace Sirens { 
-	const double pi = 2 * asin(1.0);
+	const double PI = 2 * asin(1.0);
 	
 	// General math functions.
 	int minimum(int a, int b);
@@ -24,7 +26,7 @@ namespace Sirens {
 
 	int next_pow(int n, int base);
 
-	double signal_rms(double* data, int size);
+	double signal_rms(CircularArray* input);
 
 	double lerp(double value, double min, double max);
 	

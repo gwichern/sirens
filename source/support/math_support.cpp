@@ -38,17 +38,17 @@ namespace Sirens {
 		return j;
 	}
 
-	double signal_rms(double* data, int size) {
+	double signal_rms(CircularArray* input) {
 		double sum_of_squares = 0;
-	
-		double* item = data;
-	
-		for (int i = 0; i < size; i++) {
-			sum_of_squares += (*item) * (*item);
-			item ++;
+		
+		double* data = input->getData();
+		
+		for (int i = 0; i < input->getSize(); i++) {
+			sum_of_squares += (*data) * (*data);
+			data ++;
 		}
-	
-		return sqrt(sum_of_squares / (double)size);
+		
+		return sqrt(sum_of_squares / (double)input->getSize());
 	}
 
 	double hz_to_bark(double hz) {
@@ -71,7 +71,7 @@ namespace Sirens {
 		double* window = new double[size];
 	
 		for (int i = 0; i < size; i++)
-			window[i] = 0.54 - 0.46 * cos((2 * pi * i) / (size - 1));
+			window[i] = 0.54 - 0.46 * cos((2 * PI * i) / (size - 1));
 	
 		return window;
 	}
