@@ -5,6 +5,9 @@
 #include "support/math_support.h"
 #include "support/string_support.h"
 
+#include <iostream>
+using namespace std;
+
 namespace Sirens {
 	Sound::Sound() {
 		frameLength = 0.04;
@@ -124,39 +127,51 @@ namespace Sirens {
 	
 	void Sound::extractFeatures() {
 		CircularArray sample_array(getSamplesPerFrame());			// Samples of the current frame.
-		CircularArray windowed_array(getSamplesPerFrame(), true);	// Windowed samples of the current frame. Zero-padded for FFT.
 		CircularArray spectrum_array(getSpectrumSize());			// Spectrum magnitudes of the current frame.
+		CircularArray windowed_array(getSamplesPerFrame());
 		
-		// Prepare FFT.
-		FFT fft(getFFTSize(), windowed_array.getData());
+		// Prepare FFT. Unfortunately, it's necessary to loop copy the fft input and output element-by-element to allow 
+		// CircularArray to be thread-safe.
+		double* fft_input = new double[getFFTSize()];
+		for (int i = 0; i < getFFTSize(); i++)
+			fft_input[i] = 0;
 		
 		double* window = create_hamming_window(getSamplesPerFrame());
 		
-		// Add each sample to the circular buffer.
+		FFT fft(getFFTSize(), windowed_array.getData());
+		
+		// Start reading in frames.
 		int readcount;
  		long frame_number = 0;
 		int samples_per_hop = getSamplesPerHop();
 		double* new_samples = new double[samples_per_hop];
-				
+		
+		features->startFeatures();
+			
 		while (readcount = sf_read_double(soundFile, new_samples, samples_per_hop)) {
-			for (int i = 0; i < samples_per_hop; i++)
-				sample_array.addValue(new_samples[i]);
+			// Similar to the FFT, it's necessary to copy read values element-by-eleent to allow CircularArray to be thead-safe.
+			double* sample_value = new_samples;
+			
+			for (int i = 0; i < readcount; i++) {
+				sample_array.addValue(*sample_value);
+				sample_value ++;
+			}
 			
 			// The first hop or two will not necessarily be a full frame's worth of data.
 			if (sample_array.getSize() == sample_array.getMaxSize()) {
+				// Debug progress indicator.
 				if (frame_number % 1000 == 0)
 					cout << "Frame " << frame_number << endl;
 				
-				// Calculate sample features that don't need FFT.
+				// Calculate sample features.
 				features->calculateSampleFeatures(&sample_array);
 				
-				// FFT.
 				for (int i = 0; i < getSamplesPerFrame(); i++)
-					windowed_array.addValue(sample_array.getValueAt(i) * window[i]);
+					windowed_array.addValue(sample_array.getValue(i) * window[i]);
 				
 				fft.calculate();
 				
-				for (int i = 0; i < fft.getOutputSize(); i++) {					
+				for (int i = 0; i < fft.getOutputSize(); i++) {		
 					double first = fft.getOutput()[i][0];
 					double second = fft.getOutput()[i][1];
 					
@@ -170,8 +185,11 @@ namespace Sirens {
 			}
 		}
 		
+		features->stopFeatures();
+		
 		// Cleanup.
 		delete [] new_samples;
+		delete [] fft_input;
 		delete [] window;
 	}
 }
