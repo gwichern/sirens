@@ -1,6 +1,3 @@
-#include <iostream>
-using namespace std;
-
 #include "../source/Sirens.h"
 using namespace Sirens;
 
@@ -9,7 +6,7 @@ int main() {
 	Sound* sound = new Sound();
 	sound->setFrameLength(0.04);
 	sound->setHopLength(0.02);
-	sound->open("sound.wav");
+	sound->open("/Users/brandon/Documents/git/sirens/examples/sound.wav");
 	
 	// Initialize features.
 	Loudness* loudness = new Loudness(sound->getFrameCount());
