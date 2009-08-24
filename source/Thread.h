@@ -9,11 +9,11 @@ protected:
 	pthread_t thread;
 	
 public:	
-	virtual void run() = 0;				// Implement this--is called upon start(). Usually a nonstop loop of some sort.
-	void start();
+	Thread();
+	
+	bool start(void* (*routine)(void*), void* data = NULL);
+	bool cancel();
+	bool wait();
 };
-
-// Static method for beginning threads with pthread.
-void *start_thread(void* data);
 
 #endif
