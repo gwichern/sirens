@@ -19,9 +19,6 @@ namespace Sirens {
 		vector<Feature*> spectralFeatures;
 		
 	public:
-		void startFeatures();					// Spawns running threads for all features.
-		void stopFeatures();					// Signals all features to stop. Necessary before destroying the features.
-		
 		void addSampleFeature(Feature* feature);
 		void addSpectralFeature(Feature* feature);
 		
