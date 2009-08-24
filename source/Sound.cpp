@@ -146,8 +146,6 @@ namespace Sirens {
 		int samples_per_hop = getSamplesPerHop();
 		double* new_samples = new double[samples_per_hop];
 		
-		features->startFeatures();
-			
 		while (readcount = sf_read_double(soundFile, new_samples, samples_per_hop)) {
 			// Similar to the FFT, it's necessary to copy read values element-by-eleent to allow CircularArray to be thead-safe.
 			double* sample_value = new_samples;
@@ -184,8 +182,6 @@ namespace Sirens {
 				frame_number = frame_number + 1;
 			}
 		}
-		
-		features->stopFeatures();
 		
 		// Cleanup.
 		delete [] new_samples;
