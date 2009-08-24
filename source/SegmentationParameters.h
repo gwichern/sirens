@@ -6,7 +6,7 @@ using namespace std;
 
 namespace Sirens {
 	class SegmentationParameters {
-	private:
+	protected:
 		bool initialized;
 		
 		// Feature normalization.
