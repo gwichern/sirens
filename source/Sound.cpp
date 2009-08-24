@@ -5,9 +5,6 @@
 #include "support/math_support.h"
 #include "support/string_support.h"
 
-#include <iostream>
-using namespace std;
-
 namespace Sirens {
 	Sound::Sound() {
 		frameLength = 0.04;
@@ -157,10 +154,6 @@ namespace Sirens {
 			
 			// The first hop or two will not necessarily be a full frame's worth of data.
 			if (sample_array.getSize() == sample_array.getMaxSize()) {
-				// Debug progress indicator.
-				if (frame_number % 1000 == 0)
-					cout << "Frame " << frame_number << endl;
-				
 				// Calculate sample features.
 				features->calculateSampleFeatures(&sample_array);
 				

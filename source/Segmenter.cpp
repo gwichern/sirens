@@ -1,6 +1,5 @@
 #include "Segmenter.h"
 
-#include <iostream>
 #include <cmath>
 using namespace std;
 
@@ -13,7 +12,7 @@ namespace Sirens {
 		initialized = false;
 	}
 	
-	Segmenter::~Segmenter() {
+	Segmenter::~Segmenter() {		
 		for (int i = 0; i < oldBeams.size(); i++)
 			delete oldBeams[i];
 		
@@ -314,9 +313,6 @@ namespace Sirens {
 		starts.push_back(0);
 		
 		for (int i = 0; i < feature_set->getMinHistorySize(); i++) {
-			if ((i % 1000) == 0)
-				cout << "Frame " << i << endl;
-				
 			for (int j = 0; j < features.size(); j++)
 				y[j] = features[j]->getHistoryFrame(i);
 			
