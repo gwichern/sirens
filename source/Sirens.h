@@ -3,9 +3,9 @@
 
 #include "Feature.h"
 #include "FeatureSet.h"
+#include "Sound.h"
 #include "SegmentationParameters.h"
 #include "Segmenter.h"
-#include "Thread.h"
 #include "features/Harmonicity.h"
 #include "features/Loudness.h"
 #include "features/SpectralCentroid.h"
