@@ -10,16 +10,9 @@ using namespace std;
 #include "SegmentationParameters.h"
 
 namespace Sirens {
-	class Feature : public Thread {
+	class Feature {
 	private:
-		// Concurrency.
-		bool running;								// whether or not the thread is running. for exiting the run loop.
-		bool recalculate;
-		bool complete;
-		
-		pthread_mutex_t mutex;
-		pthread_cond_t recalculateCondition;
-		pthread_cond_t completeCondition;					
+		Thread thread;
 		
 		// Segmentation.
 		SegmentationParameters* segmentationParameters;
@@ -41,9 +34,6 @@ namespace Sirens {
 	public:
 		Feature(int history_size = 1);
 		virtual ~Feature();
-		
-		void run();									// waits for signal to calculate, calculates, loops.
-		void stop();								// turns off the run loop. Does not destroy the thread.
 		
 		// Calculation.
 		void calculate(CircularArray* input_in);
@@ -72,6 +62,12 @@ namespace Sirens {
 		virtual string toString();
 		string historyString();	
 	};
+	
+	static void* run_feature(void* data) {
+		Feature* feature = (Feature*)data;
+
+		feature->prepareCalculation();
+	}
 }
 
 #endif
