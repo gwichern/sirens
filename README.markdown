@@ -4,13 +4,15 @@ Sirens is a library for segmentation, indexing, and retrieval of environmental a
 Sirens is being developed simultaneously with [sirens-ruby](http://github.com/plant/sirens-ruby), a Ruby gem that implements the features within Sirens.
 
 # Requirements
-Any application using Sirens also needs to link against [FFTW](http://www.fftw.org), [libsndfile](http://www.mega-nerd.com/libsndfile/), and pthread.
+Any application using Sirens also needs to link against [FFTW](http://www.fftw.org), [libsndfile](http://www.mega-nerd.com/libsndfile/), and pthread.  In the future, a sirens-config binary will assist with this process, but for now, something like the following should work:
+
+	g++ myproject.cpp -lsirens -lfftw3 -lsndfile -lpthread
 
 # Installation
 To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Additionally, make sure you have the [FFTW](http://www.fftw.org) and [libsndfile](http://www.mega-nerd.com/libsndfile/) headers installed. Then, perform the following commands in the project's directory:
 
 	scons
-	scons install
+	sudo scons install
 	
 To get rid of intermediate build files, type:
 	
