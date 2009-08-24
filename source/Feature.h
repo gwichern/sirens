@@ -23,14 +23,14 @@ namespace Sirens {
 		// Normalization. Values are scaled between min and max.
 		double min, max;
 		
+		virtual void initialize() {};				// on-demand initialization, as some parameters may not be set on construction.
+		virtual void freeMemory() {};				// called on re-initialization, to free up any memory allocated at initialization.
+	
 	protected:
 		CircularArray* input;						// input buffer to perform calculations on.
 		bool initialized;							// whether or not the feature has been initialized.
 		double value;								// actual value calculated.
 			
-		virtual void initialize() {};				// on-demand initialization, as some parameters may not be set on construction.
-		virtual void freeMemory() {};				// called on re-initialization, to free up any memory allocated at initialization.
-		
 	public:
 		Feature(int history_size = 1);
 		virtual ~Feature();

@@ -2,9 +2,6 @@
 
 #include "support/math_support.h"
 
-#include <iostream>
-using namespace std;
-
 namespace Sirens {
 	Feature::Feature(int history_size) {		
 		history = new CircularArray(history_size);
