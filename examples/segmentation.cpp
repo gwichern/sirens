@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "../source/Sirens.h"
+#include "../source/support/string_support.h"
 using namespace Sirens;
 
 int main() {
@@ -71,12 +72,25 @@ int main() {
 	sound->close();
 	
 	// Segment sound.
-	Segmenter* segmenter = new Segmenter(0.00000000001, 0.00000000001, 20);
-	vector<vector<double> > segments = segmenter->getSegments(features);
+	Segmenter* segmenter = new Segmenter(0.00000000001, 0.00000000001);
+	segmenter->segment(features);
+	
+	vector<int> modes = segmenter->getModes();
+	
+	vector<double> modes_double(modes.size());
+	
+	for (int i = 0; i < modes.size(); i++)
+		modes_double[i] = modes[i];
+		
+	write_csv_file("modes.csv", vector<double>(modes_double));
+	
+	vector<vector<double> > segments = segmenter->getSegments();
 	
 	// Output segments.
+	cout << "\tSegments: " << endl;
+	
 	for (int i = 0; i < segments.size(); i++)
-		cout << i << ": " << segments[i][0] << "-" << segments[i][1] << endl;
+		cout << "\t\t" << i << ": " << segments[i][0] << "-" << segments[i][1] << endl;
 	
 	// Clean up.
 	delete sound;
