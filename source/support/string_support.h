@@ -19,6 +19,7 @@ namespace Sirens {
 	string double_to_string(double data);
 	string int_to_string(int data);
 	void write_csv_file(string path, vector<vector<double> > input);
+	void write_csv_file(string path, vector<double> input, bool row = false);
 }
 
 #endif
