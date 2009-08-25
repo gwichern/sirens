@@ -1,5 +1,5 @@
 # Sirens
-Sirens is a library for segmentation, indexing, and retrieval of environmental and natural sounds. Sirens is currently under development and at the moment only supports feature extraction and partially working segmentation. Check back later for updates.
+Sirens is a library for segmentation, indexing, and retrieval of environmental and natural sounds. Sirens is currently under development and at the moment is only ready to use for extraction and segmentation per [1] below. Check back later for updates on retrieval and indexing.
 
 Sirens is being developed simultaneously with [sirens-ruby](http://github.com/plant/sirens-ruby), a Ruby gem that implements the features within Sirens.
 
