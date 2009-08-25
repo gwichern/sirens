@@ -4,20 +4,14 @@
 using namespace std;
 
 namespace Sirens {
-	Segmenter::Segmenter(double p_new, double p_off, int nbeams) {
+	Segmenter::Segmenter(double p_new, double p_off) {
 		setPNew(p_new);
 		setPOff(p_off);
-		setBeams(nbeams);
 		
 		initialized = false;
 	}
 	
 	Segmenter::~Segmenter() {		
-		for (int i = 0; i < oldBeams.size(); i++)
-			delete oldBeams[i];
-		
-		for (int i = 0; i < newBeams.size(); i++)
-			delete newBeams[i];
 	}
 	
 	void Segmenter::setPNew(double value) {
@@ -28,20 +22,12 @@ namespace Sirens {
 		pOff = value;
 	}
 	
-	void Segmenter::setBeams(int value) {
-		beams = value;
-	}
-	
 	double Segmenter::getPNew() {
 		return pNew;
 	}
 	
 	double Segmenter::getPOff() {
 		return pOff;
-	}
-	
-	int Segmenter::getBeams() {
-		return beams;
 	}
 	
 	void Segmenter::createModeLogic() {
@@ -152,104 +138,49 @@ namespace Sirens {
 		return 0.5 * (log(s) + (err * err / s));
 	}
 	
-	void Segmenter::beamSearch() {
-		int stp, old_ind, tmp;
+	void Segmenter::viterbi(int frame) {
 		int edges = getEdges();
-		stp = getEdges() / 3;
 		
-		for (int j = 0; j < features.size(); j++) {
-			for (int i = 0; i < 3; i++) {
-				for (int k = 0; k < tempBeams; k++) {
-					old_ind = modeMatrix[j + 1][newBeams[k]->oldMode] - 1;
+		for (int new_index = 0; new_index < edges; new_index++) {
+			for (int old_index = 0; old_index < edges; old_index++) {
+				double cost_temp = 0;
+				
+				for (int feature_index = 0; feature_index < features.size(); feature_index++) {
+					SegmentationParameters* parameters = features[feature_index]->getSegmentationParameters();
 					
-					tempDSBN[j][i][k] = oldDSBN[j][k];
+					newDistributions[feature_index][new_index][old_index].cost = KalmanLPF(
+						y[feature_index],
+						newDistributions[feature_index][new_index][old_index].covariance,
+						newDistributions[feature_index][new_index][old_index].mean,
+						parameters->getR(),
+						parameters->q[modeMatrix[feature_index + 1][old_index] - 1][modeMatrix[feature_index + 1][new_index] - 1],
+						parameters->getAlpha()
+					);
 					
-					SegmentationParameters* parameters = features[j]->getSegmentationParameters();
+					cost_temp += newDistributions[feature_index][new_index][old_index].cost;
+				}
+				
+				costs[new_index][old_index] = oldCosts[old_index] + cost_temp - probabilityMatrix[new_index][old_index];
+			}
+		}
+		
+		for (int i = 0; i < costs.size(); i++) {
+			vector<double>::iterator minimum_iterator = min_element(costs[i].begin(), costs[i].end());
+			psi[frame][i] = distance(costs[i].begin(), minimum_iterator);
+			oldCosts[i] = *minimum_iterator;
+		}
+		
+		// Copy best filtered states and covariances.
+		for (int i = 0; i < edges; i++) {
+			for (int feature_index = 0; feature_index < features.size(); feature_index++) {
+				for (int row = 0; row < 2; row++) {
+					maxDistributions[feature_index][i].mean[row] = newDistributions[feature_index][i][psi[frame][i]].mean[row];
 					
-					tempDSBN[j][i][k].cost = KalmanLPF(
-							y[j], 
-							tempDSBN[j][i][k].covariance, 
-							tempDSBN[j][i][k].mean, 
-							parameters->getR(), 
-							parameters->q[old_ind][i],
-							parameters->getAlpha());
+					for (int column = 0; column < 2; column++)
+						maxDistributions[feature_index][i].covariance[row][column] = newDistributions[feature_index][i][psi[frame][i]].covariance[row][column];
 				}
 			}
 		}
-		
-		int k[features.size()];
-		
-		for (int i = 0; i < stp; i++) {
-			for (int j = features.size() - 1; j > -1; j--)
-				k[j] = (i / int(pow(3.0, double(features.size() - j - 1)))) % 3;
-			
-			for (int j = 0; j < tempBeams; j++) {
-				Beam* new_beam_1 = newBeams[i + edges * j];
-				Beam* new_beam_2 = newBeams[i + stp + edges * j];
-				Beam* new_beam_3 = newBeams[i + stp * 2 + edges * j];
-				Beam* old_beam = oldBeams[j];
-				
-				new_beam_1->cost = old_beam->cost - probabilityMatrix[i][old_beam->oldMode];
-				new_beam_2->cost = old_beam->cost - probabilityMatrix[i + stp][old_beam->oldMode];
-				new_beam_3->cost = old_beam->cost - probabilityMatrix[i + stp * 2][old_beam->oldMode];
-				
-				for (int l = 0; l < features.size(); l++) {
-					new_beam_1->cost += tempDSBN[l][k[l]][j].cost;
-					new_beam_2->cost += tempDSBN[l][k[l]][j].cost;
-					new_beam_3->cost += tempDSBN[l][k[l]][j].cost;
-				}
-				
-				new_beam_1->oldSequenceNumber = j;
-				new_beam_2->oldSequenceNumber = j;
-				new_beam_3->oldSequenceNumber = j;
-
-				new_beam_1->oldMode = i;
-				new_beam_2->oldMode = i + stp;
-				new_beam_3->oldMode = i + stp * 2;
-			}
-		}
-		
-		partial_sort(newBeams.begin(), newBeams.begin() + tempBeams, newBeams.end(), compareCost);
-		
-		if (tempBeams < beams) {
-			tmp = 0;
-			
-			for (int i = 0; i < tempBeams; i++)
-				tmp = tmp + edges;
-			
-			if (tmp < beams)
-				tempBeams = tmp;
-			else
-				tempBeams = beams;
-		}
-		
-		for (int i = 0; i < tempBeams; i++) {
-			for (int j = 0; j < features.size(); j++) {
-				int tempp = modeMatrix[j + 1][newBeams[i]->oldMode] - 1;
-				oldDSBN[j][i] = tempDSBN[j][tempp][newBeams[i]->oldSequenceNumber];
-			}
-			
-			newPsi[i] = oldPsi[newBeams[i]->oldSequenceNumber];
-			
-			if (newPsi[i].size() > 50)
-				newPsi[i].erase(newPsi[i].begin());
-			
-			newPsi[i].push_back(newBeams[i]->oldMode);
-		}
-		
-		if (newPsi[0].size() > 50)
-			newMode = modeMatrix[0][newPsi[0][0]];
-		else
-			newMode = 1;
-		
-		start = (newMode == 2);
-		stop = ((oldMode == 3) && (newMode != 3));
-		
-		oldMode = newMode;
-		oldPsi = newPsi;
-		vector<Beam*> temp_beams = oldBeams;
-		oldBeams = newBeams;
-		newBeams = temp_beams;
 	}
 	
 	void Segmenter::initialize() {
@@ -261,96 +192,87 @@ namespace Sirens {
 			createProbabilityTable();
 			
 			int edges = getEdges();
+			modes = vector<int>(frames, 0);
 			
-			tempBeams = 1;
+			vector<double> cost_vector = vector<double>(edges, 0);
+			costs = vector<vector<double> >(edges, cost_vector);
+			oldCosts = vector<double>(edges, 0);
 			
-			oldBeams = vector<Beam*>(edges * beams);
-			for (int i = 0; i < oldBeams.size(); i++)
-				oldBeams[i] = new Beam();
-				
-			newBeams = vector<Beam*>(edges * beams);
-			for (int i = 0; i < newBeams.size(); i++)
-				newBeams[i] = new Beam();
+			vector<int> psi_row = vector<int>(edges, 0);
+			psi = vector<vector<int> >(frames, psi_row);
 			
-			vector<DSBN> temp1(beams);
-			oldDSBN = vector<vector<DSBN> >(features.size(), temp1);
+			vector<ViterbiDistribution> temp1(edges);
+			maxDistributions = vector<vector<ViterbiDistribution> >(features.size(), temp1);
 			
-			vector<vector<DSBN> > temp2(3, temp1);
-			tempDSBN = vector<vector<vector<DSBN> > >(features.size(), temp2);
+			vector<vector<ViterbiDistribution> > temp2(edges, temp1);
+			newDistributions = vector<vector<vector<ViterbiDistribution> > >(features.size(), temp2);
 			
 			for (int i = 0; i < features.size(); i++) {
 				for (int a = 0; a < 2; a++) {
-					oldDSBN[i][0].mean[a] = features[i]->getSegmentationParameters()->xInit[a];
+					maxDistributions[i][0].mean[a] = features[i]->getSegmentationParameters()->xInit[a];
 					
 					for (int b = 0; b < 2; b++)
-						oldDSBN[i][0].covariance[a][b] = features[i]->getSegmentationParameters()->pInit[a][b];
+						maxDistributions[i][0].covariance[a][b] = features[i]->getSegmentationParameters()->pInit[a][b];
 				}
 			}
 			
-			newPsi = vector<vector<int> >(beams);
-			oldPsi = vector<vector<int> >(beams);
-			
 			y = vector<double>(features.size(), 0);
-			
-			start = false;
-			stop = false;
 			
 			initialized = true;
 		}
 	}
 	
-	vector<vector<double> > Segmenter::getSegments(FeatureSet* feature_set) {
+	void Segmenter::segment(FeatureSet* feature_set) {
 		features = feature_set->getFeatures();
-		
-		vector<double> starts;
-		vector<double> stops;
-		vector<vector<double> > segments;
+		frames = feature_set->getMinHistorySize();
 		
 		initialize();
-		
-		// true: start, false: stop
-		bool last_signal = true;
-		starts.push_back(0);
-		
-		for (int i = 0; i < feature_set->getMinHistorySize(); i++) {
+				
+		for (int i = 0; i < frames; i++) {
 			for (int j = 0; j < features.size(); j++)
 				y[j] = features[j]->getHistoryFrame(i);
 			
-			beamSearch();
-						
-			if (start) {
-				if (last_signal)
-					stops.push_back(i);
-				
-				starts.push_back(i);
-				
-				last_signal = true;
-			}
-			
-			if (stop) {
-				if (last_signal)
-					stops.push_back(i);
-				
-				last_signal = false;
-			}
+			viterbi(i);
 		}
 		
-		// If there is a final, unstopped segmented, implicitly stop it at the end of the sound.
-		if (starts.size() > stops.size())
-			stops.push_back(feature_set->getMinHistorySize() - 1);
+		vector<int> state_sequence(frames, 0);
+		vector<double>::iterator minimum_cost = min_element(oldCosts.begin(), oldCosts.end());
+		state_sequence[frames - 1] = distance(oldCosts.begin(), minimum_cost);
 		
-		// Segments are between starts and stops.
-		while (starts.size() > 0 && stops.size() > 0) {
+		for (int i = frames - 2; i > -1; i--) 
+			state_sequence[i] = psi[i][state_sequence[i + 1]];
+		
+		for (int i = 0; i < frames; i++)
+			modes[i] = modeMatrix[0][state_sequence[i]];
+	}
+	
+	vector<vector<double> > Segmenter::getSegments() {
+		vector<vector<double> > segments;
+		vector<int> starts;
+		vector<int> stops;
+		
+		if (modes.size() > 1 && (modes[modes.size() - 1] == 2))
+			modes[modes.size() - 1] = modes[modes.size() - 2];
+		
+		for (int i = 0; i < modes.size(); i++) {	
+			if ((i == 0 && modes[i] == 3) || (modes[i] == 2))
+				starts.push_back(i);
+			else if ((i > 0) && (modes[i - 1] == 3) && (modes[i] != 3))
+				stops.push_back(i);
+		}
+		
+		for (int i = 0; i < starts.size(); i++) {
 			vector<double> segment(2);
-			segment[0] = starts.front();
-			segment[1] = stops.front();
-			
-			starts.erase(starts.begin());
-			stops.erase(stops.begin());
+			segment[0] = starts[i];
+			segment[1] = (i >= stops.size()) ? frames - 1 : stops[i];
 			
 			segments.push_back(segment);
 		}
 		
 		return segments;
+	}
+	
+	vector<int> Segmenter::getModes() {
+		return modes;
 	}
 }
