@@ -39,3 +39,6 @@ Sirens is based off research within the [Arts, Media and Engineering](http://ame
 3. J. Xue, Gordon Wichern, H. Thornburg, and A. Spanias, “Fast query-by-example of environmental sounds via robust and efficient cluster-based indexing,” in _Proc. of IEEE International Conference on Acoustics Speech and Signal Processing (ICASSP)_, Las Vegas, NV, April 2008. [(PDF)](http://www.public.asu.edu/~gwichern/cluster_ICASSP08.pdf)
 
 Additionally, work on Sirens is supported by the [National Science Foundation](http://www.nsf.gov/) under Grants NSF IGERT DGE-05-04647 and NSF CISE Research Infrastructure 04-03428.
+
+# License
+Sirens is Copyright 2007-2009 Brandon Mechtley, Gordon Wichern, Alex Fink, and Harvey Thornburg and is licensed under the [CC-GNU GPL](http://creativecommons.org/licenses/GPL/2.0/). See COPYING for details.
