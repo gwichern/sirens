@@ -97,7 +97,7 @@ namespace Sirens {
 			", Start: " + double_to_string(start) + "\n\t";
 		
 		for (int i = 0; i < size; i++)
-			history_string += double_to_string(data[i]) + " ";
+			history_string += double_to_string(getValue(i)) + " ";
 				
 		return history_string;
 	}
