@@ -15,8 +15,8 @@
 	with Sirens. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MATH_SUPPORT_H
-#define MATH_SUPPORT_H
+#ifndef __MATH_SUPPORT_H__
+#define __MATH_SUPPORT_H__
 
 #include <cmath>
 using namespace std;
@@ -27,11 +27,15 @@ namespace Sirens {
 	const double PI = 2 * asin(1.0);
 	
 	// General math functions.
+	int round(double a);
+	
 	int minimum(int a, int b);
 	int maximum(int a, int b);
 	double minimum(double a, double b);
 	double maximum(double a, double b);
-
+	
+	double akaike(int k, int n, double rss);
+	
 	int next_pow(int n, int base);
 
 	double signal_rms(CircularArray* input);
@@ -43,7 +47,7 @@ namespace Sirens {
 	double bark_to_hz(double bark);
 	double hz_to_mel(double hz);
 	double mel_to_hz(double mel);
-
+	
 	double* create_hamming_window(int size);
 }
 

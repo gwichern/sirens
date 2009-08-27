@@ -21,6 +21,13 @@ using namespace std;
 #include "math_support.h"
 
 namespace Sirens {
+	int round(double a) {
+		if ((a - floor(a)) >= 0.5)
+			return ceil(a);
+		else
+			return floor(a);
+	}
+	
 	int minimum(int a, int b) {
 		return a < b ? a : b;
 	}
@@ -37,6 +44,12 @@ namespace Sirens {
 		return a > b ? a : b;
 	}
 
+	
+	double akaike(int k, int n, double rss) {
+		double aic = 93 * k + n * log(rss / n);
+		return aic + (double(2 * k * (k + 1)) / double(n - k - 1));
+	}
+	
 	int next_pow(int n, int base) {
 		int j = base;
 
