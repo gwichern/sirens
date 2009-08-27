@@ -77,6 +77,34 @@ namespace Sirens {
 			}
 		}
 		
+		file << endl;
+		
+		file.close();
+	}
+	
+	void write_csv_file(string path, ublas::vector<double> input, bool row) {
+		vector<double> copy(input.size(), 0);
+		
+		for (int i = 0; i < input.size(); i++)
+			copy[i] = input[i];
+			
+		write_csv_file(path, copy, row);
+	}
+	
+	void write_csv_file(string path, ublas::matrix<double> input) {
+		fstream file(path.c_str(), ios::out);
+		
+		for (int i = 0; i < input.size1(); i++) {
+			for (int j = 0; j < input.size2(); j++) {
+				file << input(i, j);
+				
+				if (j < input.size2() - 1)
+					file << ",";
+			}
+			
+			file << endl;
+		}
+		
 		file.close();
 	}
 }

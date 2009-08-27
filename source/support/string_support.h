@@ -15,12 +15,16 @@
 	with Sirens. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRING_SUPPORT_H
-#define STRING_SUPPORT_H
+#ifndef __STRING_SUPPORT_H__
+#define __STRING_SUPPORT_H__
 
 #include <vector>
 #include <string>
 using namespace std;
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+using namespace boost::numeric;
 
 namespace Sirens {
 	void tokenise(const string& str, vector<string>& tokens, const string& delimiters);
@@ -28,6 +32,8 @@ namespace Sirens {
 	string int_to_string(int data);
 	void write_csv_file(string path, vector<vector<double> > input);
 	void write_csv_file(string path, vector<double> input, bool row = false);
+	void write_csv_file(string path, ublas::vector<double> input, bool row = false);
+	void write_csv_file(string path, ublas::matrix<double> input);
 }
 
 #endif
