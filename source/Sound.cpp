@@ -170,7 +170,7 @@ namespace Sirens {
 			}
 			
 			// The first hop or two will not necessarily be a full frame's worth of data.
-			if (sample_array.getSize() == sample_array.getMaxSize()) {
+			if (sample_array.getSize() == sample_array.getMaxSize() && readcount == samples_per_hop) {
 				// Calculate sample features.
 				features->calculateSampleFeatures(&sample_array);
 				
