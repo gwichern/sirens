@@ -22,6 +22,7 @@
 #include "Feature.h"
 #include "FeatureSet.h"
 #include "Sound.h"
+#include "RetrievalModel.h"
 #include "SegmentationParameters.h"
 #include "Segmenter.h"
 #include "features/Harmonicity.h"
