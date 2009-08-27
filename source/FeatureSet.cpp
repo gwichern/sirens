@@ -68,7 +68,7 @@ namespace Sirens {
 		
 		vector<Feature*> features = getFeatures();
 		
-		for (int i = 0; i < getMinHistorySize() - 1; i++) {
+		for (int i = 0; i < getMinHistorySize(); i++) {
 			vector<double> row;
 			
 			for (unsigned int j = 0; j < features.size(); j++)
