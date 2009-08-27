@@ -27,6 +27,7 @@ install_feature_headers = append_source_prefix([
 
 install_headers = append_source_prefix([
 	'SegmentationParameters.h',
+	'RetrievalModel.h',
 	'CircularArray.h', 
 	'FeatureSet.h',
 	'Segmenter.h',
@@ -55,9 +56,9 @@ environment.Append(PREFIX = GetOption('prefix'))
 library = environment.Library('sirens', compile_source) 
 
 # Examples.
-all_features_example = environment.Program('examples/all_features', 'examples/all_features.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
 segmentation_example = environment.Program('examples/segmentation', 'examples/segmentation.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
-
+retrieval_example = environment.Program('examples/retrieval', 'examples/retrieval.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
+features_example = environment.Program('examples/features', 'examples/features.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
 # Install library.
 environment.Install('$PREFIX/lib', library)
 environment.Install('$PREFIX/include/sirens', install_headers)
