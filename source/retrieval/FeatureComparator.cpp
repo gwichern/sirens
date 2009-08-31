@@ -23,9 +23,6 @@
 #include <boost/numeric/ublas/vector_proxy.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
-#include <iostream>
-using namespace std;
-
 namespace Sirens {
 	FeatureComparator::FeatureComparator(Feature* feature_in) {
 		feature = feature_in;
@@ -407,12 +404,6 @@ namespace Sirens {
 		smooth();
 		fitCurve();
 		createHMM();
-		 
-		cout << "\t\tprior: " << prior << endl;
-		cout << "\t\ttransitions: " << transitions << endl;
-		cout << "\t\ttimeSamples: " << bestFit->timeSamples << endl;
-		cout << "\t\tmean: " << bestFit->mean << endl;
-		cout << "\t\tcovariance: " << bestFit->covariance << endl;
 	}
 	
 	double FeatureComparator::compare(FeatureComparator* model) {
@@ -442,9 +433,7 @@ namespace Sirens {
 			}
 			
 			return forwardAlgorithm(emission_probabilities) / double(frames);
-		} else {
-			cout << "singular!" << endl;
+		} else
 			return 0;
-		}
 	}
 }

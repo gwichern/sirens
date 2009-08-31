@@ -17,24 +17,38 @@
 
 #include "SoundComparator.h"
 
-#include <iostream>
-using namespace std;
-
 namespace Sirens {
 	SoundComparator::SoundComparator(FeatureSet* features_in) {
-		// Make new comparators for every feature in the feature set.
-		vector<Feature*> features = features_in->getFeatures();
-		
-		featureComparators.resize(features.size());
-	
-		for (int i = 0; i < features.size(); i++)
-			featureComparators[i] = new FeatureComparator(features[i]);
+		setFeatures(features_in);
 	}
 
 	SoundComparator::~SoundComparator() {
-		// Delete the feature comparators since they were created on construction.
+		freeMemory();
+	}
+	
+	void SoundComparator::freeMemory() {
 		for (int i = 0; i < featureComparators.size(); i++)
-			delete featureComparators[i];
+			delete featureComparators[i];	
+	}
+	
+	void SoundComparator::setFeatures(FeatureSet* features_in) {
+		features = features_in;
+		
+		// Make new comparators for every feature in the feature set.
+		if (features != NULL) {
+			freeMemory();
+			
+			vector<Feature*> feature_list = features->getFeatures();
+
+			featureComparators.resize(feature_list.size());
+
+			for (int i = 0; i < feature_list.size(); i++)
+				featureComparators[i] = new FeatureComparator(feature_list[i]);
+		}
+	}
+	
+	FeatureSet* SoundComparator::getFeatures() {
+		return features;
 	}
 
 	vector<FeatureComparator*> SoundComparator::getFeatureComparators() {

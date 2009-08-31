@@ -29,11 +29,16 @@ using namespace std;
 namespace Sirens {
 	class SoundComparator {
 	private:
+		FeatureSet* features;
 		vector<FeatureComparator*> featureComparators;				// The sound's features' comparators.
 		
+		void freeMemory();
 	public:
-		SoundComparator(FeatureSet* features_in);
+		SoundComparator(FeatureSet* features_in = NULL);
 		~SoundComparator();
+		
+		void setFeatures(FeatureSet* features_in);
+		FeatureSet* getFeatures();
 		
 		vector<FeatureComparator*> getFeatureComparators();
 		
