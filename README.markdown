@@ -1,5 +1,5 @@
 # Sirens
-Sirens is a library for segmentation, indexing, and retrieval of environmental and natural sounds. Sirens is currently under development and at the moment is only ready to use for extraction and segmentation per [1] below. Check back later for updates on retrieval and indexing.
+Sirens is a library for segmentation, indexing, and retrieval of environmental and natural sounds. Sirens is currently under development and at the moment is only ready to use for feature extraction, segmentation, and comparison as per [1] and [2] below. Check back later for updates.
 
 Sirens is being developed simultaneously with [sirens-ruby](http://github.com/plant/sirens-ruby), a Ruby gem that implements the features within Sirens.
 
@@ -9,7 +9,7 @@ Any application using Sirens also needs to link against [FFTW](http://www.fftw.o
 	g++ myproject.cpp -lsirens -lfftw3 -lsndfile -lpthread
 
 # Installation
-To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Additionally, make sure you have the [FFTW](http://www.fftw.org) and [libsndfile](http://www.mega-nerd.com/libsndfile/) headers installed. Then, perform the following commands in the project's directory:
+To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Additionally, make sure you have the [FFTW](http://www.fftw.org), [libsndfile](http://www.mega-nerd.com/libsndfile/), and [uBLAS](http://www.boost.org/doc/libs/1_40_0/libs/numeric/ublas/doc/index.htm) headers installed. Then, perform the following commands in the project's directory:
 
 	scons
 	sudo scons install
