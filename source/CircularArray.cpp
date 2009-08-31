@@ -21,15 +21,18 @@
 #include "support/string_support.h"
 
 namespace Sirens {
-	CircularArray::CircularArray(int max_size) {
+	CircularArray::CircularArray(int max_size, int allocated_size) {
 		start = 0;
 		size = 0;
 		index = 0;
 		maxSize = max_size;
-		 
-		data = new double[maxSize];
 		
-		for (int i = 0; i < maxSize; i++)
+		if (allocated_size == -1)
+			allocated_size = maxSize;
+			
+		data = new double[allocated_size];
+		
+		for (int i = 0; i < allocated_size; i++)
 			data[i] = 0;
 	}
 

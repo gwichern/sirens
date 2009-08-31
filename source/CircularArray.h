@@ -36,7 +36,7 @@ namespace Sirens {
 		int index;											// Pointer to the last element of the array.
 		
 	public:
-		CircularArray(int max_size = 1);
+		CircularArray(int max_size = 1, int allocated_size = -1);
 		~CircularArray();
 		
 		void addValue(double value);
