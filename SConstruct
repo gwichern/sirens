@@ -16,6 +16,16 @@ if GetOption('debug_symbols'):
 	other_flags = '-g'
 
 # Headers.
+install_segmentation_headers = append_source_prefix([
+	'segmentation/SegmentationParameters.h',
+	'segmentation/Segmenter.h'
+])
+
+install_retrieval_headers = append_source_prefix([
+	'retrieval/FeatureComparator.h',
+	'retrieval/SoundComparator.h'
+])
+
 install_feature_headers = append_source_prefix([
 	'features/SpectralCentroid.h', 
 	'features/SpectralSparsity.h',
@@ -26,11 +36,8 @@ install_feature_headers = append_source_prefix([
 ])
 
 install_headers = append_source_prefix([
-	'SegmentationParameters.h',
-	'RetrievalModel.h',
 	'CircularArray.h', 
 	'FeatureSet.h',
-	'Segmenter.h',
 	'Feature.h',
 	'Sound.h',
 	'Thread.h',
@@ -41,6 +48,8 @@ install_headers = append_source_prefix([
 compile_source = Glob(os.path.join(source_prefix, '*.cpp'))
 compile_source.extend(Glob(os.path.join(source_prefix, 'support/*.cpp')))
 compile_source.extend(Glob(os.path.join(source_prefix, 'features/*.cpp')))
+compile_source.extend(Glob(os.path.join(source_prefix, 'retrieval/*.cpp')))
+compile_source.extend(Glob(os.path.join(source_prefix, 'segmentation/*.cpp')))
 
 # Environment.
 environment = Environment(CC = 'gcc')
@@ -59,8 +68,12 @@ library = environment.Library('sirens', compile_source)
 segmentation_example = environment.Program('examples/segmentation', 'examples/segmentation.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
 retrieval_example = environment.Program('examples/retrieval', 'examples/retrieval.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
 features_example = environment.Program('examples/features', 'examples/features.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
+
 # Install library.
 environment.Install('$PREFIX/lib', library)
 environment.Install('$PREFIX/include/sirens', install_headers)
 environment.Install('$PREFIX/include/sirens/features', install_feature_headers)
-environment.Alias('install', ['$PREFIX/lib', '$PREFIX/include/sirens', '$PREFIX/include/sirens/features'])
+environment.Install('$PREFIX/include/sirens/retrieval', install_retrieval_headers)
+environment.Install('$PREFIX/include/sirens/segmentation', install_segmentation_headers)
+
+environment.Alias('install', ['$PREFIX/lib', '$PREFIX/include/sirens', '$PREFIX/include/sirens/features' '$PREFIX/include/sirens/retrieval' '$PREFIX/include/sirens/segmentation'])
