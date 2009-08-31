@@ -24,7 +24,7 @@ using namespace std;
 
 #include "Thread.h"
 #include "CircularArray.h"
-#include "SegmentationParameters.h"
+#include "segmentation/SegmentationParameters.h"
 
 namespace Sirens {
 	class Feature {
