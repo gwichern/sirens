@@ -27,7 +27,7 @@ int main() {
 	Sound* sound = new Sound();
 	sound->setFrameLength(0.04);
 	sound->setHopLength(0.02);
-	sound->open("sound.wav");
+	sound->open("sound/whistle4.wav");
 	
 	cout << "sound.wav" << endl;
 	cout << "\tSamples: " << sound->getSampleCount() << endl;
@@ -88,9 +88,13 @@ int main() {
 	sound->extractFeatures();	
 	sound->close();
 	
+	cout << "Extraction complete." << endl;
+	
 	// Segment sound.
 	Segmenter* segmenter = new Segmenter(0.00000000001, 0.00000000001);
 	segmenter->segment(features);
+	
+	cout << "Segmentation complete." << endl;
 	
 	vector<int> modes = segmenter->getModes();
 	
