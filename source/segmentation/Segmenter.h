@@ -40,6 +40,7 @@ namespace Sirens {
 	
 	class Segmenter {
 	private:
+		FeatureSet* features;
 		bool initialized;													// on-demand initialization (called from segment())
 		
 		// Initialization.
@@ -58,24 +59,27 @@ namespace Sirens {
 		vector<vector<int> > psi;											// stored state sequences
 		vector<double> oldCosts;											// cost list for previous frame
 		
-		vector<Feature*> features;											// features used for segmentation (get parameters and trajectories here)
-		
 		// Runtime.
 		vector<vector<ViterbiDistribution> > maxDistributions;				// most likely gaussian distributions of state vectors for each feature
 		vector<vector<vector<ViterbiDistribution> > > newDistributions;		// gaussian distribution of state vectors for each feature
 		
-		// Methods.
+		// Helpers.
 		vector<int> getFeatureIndices(int feature);							// return indices of the global mode matrix for the given feature.
 		int getEdges();														// 3 ^ (features + 1)
 		
-		// Kalman Filter for smoothing input feature trajectories.
+		// Algorithms.
 		double KalmanLPF(double y, double p[2][2], double x[2], double r, double q, double alpha);
+		void viterbi(int frame);
 		
 		vector<int> modes;
 		
 	public:	
 		Segmenter(double p_new = 0, double p_old = 0);
 		~Segmenter();
+		
+		// Features.
+		void setFeatures(FeatureSet* features_in);
+		FeatureSet* getFeatures();
 		
 		// Attributes.
 		void setPNew(double value);
@@ -91,9 +95,8 @@ namespace Sirens {
 		void createProbabilityTable();
 		void initialize();				
 		
-		// Segmentation. TODO: See about replacing this with a working beam search.
-		void viterbi(int frame);											// viterbi algorithm.		
-		void segment(FeatureSet* features);									// perform segmentation, create global mode trajectory
+		// Segmentation.
+		void segment();														// perform segmentation, create global mode trajectory
 		
 		// After segmentation.
 		vector<vector<double> > getSegments();								// get activated segments
