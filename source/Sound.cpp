@@ -140,29 +140,27 @@ namespace Sirens {
 	}
 	
 	void Sound::extractFeatures() {
-		CircularArray sample_array(getSamplesPerFrame());			// Samples of the current frame.
-		CircularArray spectrum_array(getSpectrumSize());			// Spectrum magnitudes of the current frame.
-		CircularArray windowed_array(getSamplesPerFrame());
+		CircularArray sample_array(getSamplesPerFrame());					// Samples of the current frame.
+		CircularArray windowed_array(getSamplesPerFrame(), getFFTSize());	// Windowed samples of the current frame, pad with 0s for STFT.
+		CircularArray spectrum_array(getSpectrumSize());					// STFT spectrum magnitudes of the current frame.
 		
-		// Prepare FFT. Unfortunately, it's necessary to loop copy the fft input and output element-by-element to allow 
-		// CircularArray to be thread-safe.
-		double* fft_input = new double[getFFTSize()];
-		for (int i = 0; i < getFFTSize(); i++)
-			fft_input[i] = 0;
-		
+		// Hamming window for STFT.
 		double* window = create_hamming_window(getSamplesPerFrame());
 		
 		FFT fft(getFFTSize(), windowed_array.getData());
 		
 		// Start reading in frames.
-		int readcount;
+		int readcount = 0;
  		long frame_number = 0;
 		int samples_per_hop = getSamplesPerHop();
-		double* new_samples = new double[samples_per_hop];
+		double* hop_samples = new double[samples_per_hop];
 		
-		while (readcount = sf_read_double(soundFile, new_samples, samples_per_hop)) {
+		for (int i = 0; i < samples_per_hop; i++)
+			hop_samples[i] = 0;
+		
+		while (readcount = sf_read_double(soundFile, hop_samples, samples_per_hop)) {
 			// Similar to the FFT, it's necessary to copy read values element-by-eleent to allow CircularArray to be thead-safe.
-			double* sample_value = new_samples;
+			double* sample_value = hop_samples;
 			
 			for (int i = 0; i < readcount; i++) {
 				sample_array.addValue(*sample_value);
@@ -174,9 +172,11 @@ namespace Sirens {
 				// Calculate sample features.
 				features->calculateSampleFeatures(&sample_array);
 				
+				// Window the time-domain signal for STFT.
 				for (int i = 0; i < getSamplesPerFrame(); i++)
 					windowed_array.addValue(sample_array.getValue(i) * window[i]);
 				
+				// Perform STFT.
 				fft.calculate();
 				
 				for (int i = 0; i < fft.getOutputSize(); i++) {		
@@ -194,8 +194,7 @@ namespace Sirens {
 		}
 		
 		// Cleanup.
-		delete [] new_samples;
-		delete [] fft_input;
+		delete [] hop_samples;
 		delete [] window;
 	}
 }
