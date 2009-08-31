@@ -9,9 +9,8 @@ Any application using Sirens also needs to link against [FFTW](http://www.fftw.o
 	g++ myproject.cpp -lsirens -lfftw3 -lsndfile -lpthread
 
 # Installation
-To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Additionally, make sure you have the [FFTW](http://www.fftw.org), [libsndfile](http://www.mega-nerd.com/libsndfile/), and [uBLAS](http://www.boost.org/doc/libs/1_40_0/libs/numeric/ublas/doc/index.htm) headers installed. Then, perform the following commands in the project's directory:
+To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Additionally, make sure you have the [FFTW](http://www.fftw.org), [libsndfile](http://www.mega-nerd.com/libsndfile/), and [uBLAS](http://www.boost.org/doc/libs/1_40_0/libs/numeric/ublas/doc/index.htm) headers installed. Then, perform the following command in the project's directory:
 
-	scons
 	sudo scons install
 	
 To get rid of intermediate build files, type:
@@ -21,7 +20,6 @@ To get rid of intermediate build files, type:
 ## Parameters
 If you do not have root access, you may have troubles installing Sirens. In this case, you can put the library in a custom directory. For example, to put the library in ~/local/lib and the includes in ~/local/include/sirens:
 
-	scons
 	scons install --prefix=$HOME/local
 	
 Additionally, if you need to point the Sirens install to a specific directory to find the FFTW or libsndfile headers, you can specify any additional parameters to the compiler using $CPPFLAGS. For example, to use ~/local/include/fftw3.h:
