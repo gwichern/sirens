@@ -23,7 +23,16 @@ int main() {
 	Sound* sound = new Sound();
 	sound->setFrameLength(0.04);
 	sound->setHopLength(0.02);
-	sound->open("sound.wav");
+	sound->open("sounds/whistle4.wav");
+	
+	// Output some information about the sound.
+	cout << "whistle4.wav" << endl;
+	cout << "\tDuration: " << double(sound->getSampleCount()) / sound->getSampleRate() << "s (" << sound->getSampleCount() << " samples)" << endl;
+	cout << "\tSample rate: " << sound->getSampleRate() << " Hz" << endl;
+	cout << "\tFrame length: " << sound->getFrameLength() << "s (" << sound->getSamplesPerFrame() << " samples)" << endl;
+	cout << "\tHop length: " << sound->getFrameLength() << "s (" << sound->getSamplesPerHop() << " samples)" << endl;
+	cout << "\tFFT size: " << sound->getFFTSize() << " samples" << endl;
+	cout << "\tSpectrum size: " << sound->getSpectrumSize() << " bins" << endl;
 	
 	// Initialize features.
 	int frames = sound->getFrameCount() - 1;			// First frame of TransientIndex is junk, so don't want to record it.
@@ -42,6 +51,7 @@ int main() {
 	harmonicity->setMaxPeaks(3);
 	harmonicity->setLPFCoefficient(0.7);
 	
+	// Initialize a feature set to hold all the features.
 	FeatureSet* features = new FeatureSet();
 	features->addSampleFeature(loudness);
 	features->addSampleFeature(temporal_sparsity);
