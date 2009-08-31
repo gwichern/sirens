@@ -99,7 +99,7 @@ namespace Sirens {
 		void segment();														// perform segmentation, create global mode trajectory
 		
 		// After segmentation.
-		vector<vector<double> > getSegments();								// get activated segments
+		vector<vector<int> > getSegments();								// get activated segments
 		vector<int> getModes();												// get global mode trajectory
 	};
 }

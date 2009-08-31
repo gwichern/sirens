@@ -304,8 +304,8 @@ namespace Sirens {
 	 * After segmentation. *
 	 *---------------------*/
 	
-	vector<vector<double> > Segmenter::getSegments() {
-		vector<vector<double> > segments;
+	vector<vector<int> > Segmenter::getSegments() {
+		vector<vector<int> > segments;
 		vector<int> starts;
 		vector<int> stops;
 		
@@ -320,7 +320,7 @@ namespace Sirens {
 		}
 		
 		for (int i = 0; i < starts.size(); i++) {
-			vector<double> segment(2);
+			vector<int> segment(2);
 			segment[0] = starts[i];
 			segment[1] = (i >= stops.size()) ? frames - 1 : stops[i];
 			
