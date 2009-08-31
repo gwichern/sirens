@@ -76,4 +76,4 @@ environment.Install('$PREFIX/include/sirens/features', install_feature_headers)
 environment.Install('$PREFIX/include/sirens/retrieval', install_retrieval_headers)
 environment.Install('$PREFIX/include/sirens/segmentation', install_segmentation_headers)
 
-environment.Alias('install', ['$PREFIX/lib', '$PREFIX/include/sirens', '$PREFIX/include/sirens/features' '$PREFIX/include/sirens/retrieval' '$PREFIX/include/sirens/segmentation'])
+environment.Alias('install', ['$PREFIX/lib', '$PREFIX/include/sirens', '$PREFIX/include/sirens/features', '$PREFIX/include/sirens/retrieval', '$PREFIX/include/sirens/segmentation'])
