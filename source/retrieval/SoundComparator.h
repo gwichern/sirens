@@ -25,10 +25,11 @@
 #include <vector>
 using namespace std;
 
+// Class for query-by-example on sounds.
 namespace Sirens {
 	class SoundComparator {
 	private:
-		vector<FeatureComparator*> featureComparators;
+		vector<FeatureComparator*> featureComparators;				// The sound's features' comparators.
 		
 	public:
 		SoundComparator(FeatureSet* features_in);

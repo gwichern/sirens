@@ -22,6 +22,7 @@ using namespace std;
 
 namespace Sirens {
 	SoundComparator::SoundComparator(FeatureSet* features_in) {
+		// Make new comparators for every feature in the feature set.
 		vector<Feature*> features = features_in->getFeatures();
 		
 		featureComparators.resize(features.size());
@@ -31,6 +32,7 @@ namespace Sirens {
 	}
 
 	SoundComparator::~SoundComparator() {
+		// Delete the feature comparators since they were created on construction.
 		for (int i = 0; i < featureComparators.size(); i++)
 			delete featureComparators[i];
 	}
@@ -46,7 +48,8 @@ namespace Sirens {
 			return 0;
 		else {
 			double likelihood = 0;
-		
+			
+			// Compare each feature against corresponding features from the other sound; sum likelihood.
 			for (int i = 0; i < featureComparators.size(); i++) {
 				double feature_likelihood = featureComparators[i]->compare(other_comparators[i]);
 				
@@ -57,10 +60,9 @@ namespace Sirens {
 		}
 	}
 	
+	// Initialize HMMs, curve parameters.
 	void SoundComparator::initialize() {
-		for (int i = 0; i < featureComparators.size(); i++) {
-			cout << "\t Feature " << i << " (" << featureComparators[i]->getFeature()->toString() << ")" << endl;
+		for (int i = 0; i < featureComparators.size(); i++)
 			featureComparators[i]->initialize();
-		}
 	}
 }
