@@ -23,7 +23,6 @@
 using namespace boost::numeric;
 
 #include "../Feature.h"
-#include "../support/savitzky_golay.h"
 
 namespace Sirens {
 	// Parameters for least-squares curve fitting.
