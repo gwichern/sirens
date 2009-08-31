@@ -28,7 +28,7 @@ Additionally, if you need to point the Sirens install to a specific directory to
 	
 	export CPPFLAGS=-I$HOME/local/include
 
-# Example
+# Tutorial
 Coming soon. See the examples/ directory for some ideas.
 
 # Upcoming changes / Helping out
