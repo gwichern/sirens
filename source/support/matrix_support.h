@@ -13,6 +13,7 @@ using namespace boost::numeric;
 namespace Sirens {
 	ublas::matrix<double> invert(ublas::matrix<double> input);
 	double determinant(ublas::matrix<double> input);
+	ublas::matrix<double> normalize_affinity(ublas::matrix<double> input);
 }
 
 #endif

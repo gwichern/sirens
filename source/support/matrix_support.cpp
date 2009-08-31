@@ -15,8 +15,11 @@ namespace Sirens {
 			ublas::lu_substitute(tmp, pm, inverse);
 
 			return inverse;
-		} else
+		} else {
+			// Easy check for singularity, as nothing inverted = 0.
+			// In the future, exceptions would be more prudent.
 			return ublas::zero_matrix<double>(1, 1);
+		}
 	}
 
 	double determinant(ublas::matrix<double> input) {
@@ -34,5 +37,15 @@ namespace Sirens {
 		}
 		
 		return det;
+	}
+	
+	ublas::matrix<double> normalize_affinity(ublas::matrix<double> input) {
+		ublas::vector<double> ones = ublas::scalar_vector<double>(input.size1(), 1);
+		ublas::vector<double> diag(input.size1());
+		
+		for (int i = 0; i < input.size1(); i++)
+			diag[i] = input(i, i);
+		
+		return ublas::outer_prod(diag, ones) + ublas::outer_prod(ublas::trans(ones), ublas::trans(diag)) - input - ublas::trans(input);
 	}
 }
