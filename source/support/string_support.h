@@ -30,9 +30,14 @@ namespace Sirens {
 	void tokenise(const string& str, vector<string>& tokens, const string& delimiters);
 	string double_to_string(double data);
 	string int_to_string(int data);
-	void write_csv_file(string path, vector<vector<double> > input);
+	
+	// Vectors.
 	void write_csv_file(string path, vector<double> input, bool row = false);
 	void write_csv_file(string path, ublas::vector<double> input, bool row = false);
+	void write_csv_file(string path, double* input, int size, bool row = false);
+	
+	// Matrices.
+	void write_csv_file(string path, vector<vector<double> > input);
 	void write_csv_file(string path, ublas::matrix<double> input);
 }
 

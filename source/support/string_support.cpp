@@ -107,4 +107,25 @@ namespace Sirens {
 		
 		file.close();
 	}
+	
+	void write_csv_file(string path, double* input, int size, bool row) {
+		fstream file(path.c_str(), ios::out);
+		
+		for (int i = 0; i < size; i++) {
+			file << (*input);
+			
+			if (i < size - 1) {
+				if (!row)
+					file << endl;
+				else
+					file << ",";
+			}
+			
+			input++;
+		}
+		
+		file << endl;
+		
+		file.close();
+	}
 }
