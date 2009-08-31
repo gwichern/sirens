@@ -50,6 +50,7 @@ namespace Sirens {
 	 * Helpers. *
 	 *----------*/
 	
+	// Fit a polynomial to the feature trajectory and compute the akaike information criterion for comparison to other curves.
 	void FeatureComparator::fitPolynomial(LeastSquaresParameters* curve, ublas::vector<double>* concatonated_trajectory) {
 		int size = trajectory.size2();
 		

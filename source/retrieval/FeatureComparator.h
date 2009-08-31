@@ -45,6 +45,7 @@ namespace Sirens {
 		ublas::vector<double> timeSamples;
 	};
 	
+	// Class that creates a retrieval model for an individual feature trajectory.
 	class FeatureComparator {
 	private:
 		Feature* feature;							// feature trajectory that this model represents.
