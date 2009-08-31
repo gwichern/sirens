@@ -44,12 +44,6 @@ int main() {
 	vector<FeatureSet*> feature_sets(files.size());
 	vector<SoundComparator*> comparators(files.size());
 	
-	cout << endl;
-	cout << "******************" << endl;
-	cout << "* INITIALIZATION *" << endl;
-	cout << "******************" << endl; 
-	cout << endl;
-	
 	// Initialize sounds.
 	for (int i = 0; i < files.size(); i++) {
 		// Initialize the sound files.
@@ -91,39 +85,23 @@ int main() {
 		sounds[i]->extractFeatures();
 		sounds[i]->close();
 		
-		// Initialize the comparators.
-		cout << files[i] << endl;
-		
 		comparators[i] = new SoundComparator(feature_sets[i]);
 		comparators[i]->initialize();
 	}
 	
 	ublas::matrix<double> likelihood(files.size(), files.size());
 	
-	cout << endl;
-	cout << "**************" << endl;
-	cout << "* COMPARISON *" << endl;
-	cout << "**************" << endl; 
-	cout << endl;
-
+	
 	// Compare each sound to itself and the other sound.
 	for (int i = 0; i < files.size(); i++) {
-		for (int j = 0; j < files.size(); j++) {
-			cout << "(" << i << ", " << j << ")" << endl;
+		for (int j = 0; j < files.size(); j++)
 			likelihood(i, j) = comparators[i]->compare(comparators[j]);
-		}
 	}
 	
 	ublas::matrix<double> affinity = normalize_affinity(likelihood);
 	
-	cout << endl;
-	cout << "***********" << endl;
-	cout << "* RESULTS *" << endl;
-	cout << "***********" << endl; 
-	cout << endl;
-	
-	cout << "Likelihood: " << likelihood << endl;
-	cout << "Affinity: " << affinity << endl << endl;
+	cout << "Log-likelihood: " << likelihood << endl;
+	cout << "Normalized distances: " << affinity << endl << endl;
 	
 	// Clean up.
 	for (int i = 0; i < files.size(); i++) {
