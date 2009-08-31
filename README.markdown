@@ -31,6 +31,9 @@ Additionally, if you need to point the Sirens install to a specific directory to
 # Example
 Coming soon. See the examples/ directory for some ideas.
 
+# Upcoming changes / Helping out
+There are a number of tasks we are planning for improving Sirens. If you are interested in working on or making any fixes to Sirens, thanks! Just fork this project. If you're looking for some inspiration, check out TODO.markdown.
+ 
 # Acknowledgements
 Sirens is based off research within the [Arts, Media and Engineering](http://ame.asu.edu/) program at [Arizona State University](http://asu.edu/). For more information, the following papers may be of interest:
 
