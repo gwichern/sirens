@@ -18,7 +18,7 @@ There are currently no unit tests.
 ## Segmentation
 1. **Algorithm documentation** - The algorithms used for segmentation could be more appropriately documented.
 2. **Parameter documentation** - The parameters are not sufficiently documented as of yet.
-3. **Viterbi beam search** - Currently, the most optimal mode sequence for segmentation is found by applying the full Viterbi algorithm to the network, which has complexity O(3^(F + 2) * N), where F is the number of featues and N is the length of the sound in frames. The beam search approximation is much more efficient (O(F^2 * N)) and probably sufficient for segmentation.
+3. **Viterbi beam search** - Currently, the most optimal mode sequence for segmentation is found by applying the full Viterbi algorithm to the network, which has complexity O(3<sup>F + 2</sup>N), where F is the number of featues and N is the length of the sound in frames. The beam search approximation is much more efficient (O(F<sup>2</sup>N)) and probably sufficient for segmentation.
 4. **Parameter learning** - Techniques for parameter learning can help reduce the complexity of using Sirens segmentation. Currently, each feature has 12 parameters that need to be set. New environments or recording devices require retuning these parameters. Gordon Wichern is working on techniques for learning these automatically. Another, less sophisticated, potential solution includes creating an application to estimate these from examples (e.g. measuring features' covariances when active/inactive).
 
 ## Retrieval
