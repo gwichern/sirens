@@ -42,18 +42,8 @@ namespace Sirens {
 		return spectralFeatures;
 	}
 	
-	void FeatureSet::setSampleFeatures(vector<Feature*> sample_features) {
-		sampleFeatures = sample_features;
-	}
-	
-	void FeatureSet::setSpectralFeatures(vector<Feature*> spectral_features) {
-		spectralFeatures = spectral_features;
-	}
-	
 	int FeatureSet::getMinHistorySize() {
 		int min_history_size = -1;
-		
-		vector<Feature*> features = getFeatures();
 		
 		for (int i = 0; i < features.size(); i++) {
 			if (min_history_size < 0 || features[i]->getHistorySize() < min_history_size)

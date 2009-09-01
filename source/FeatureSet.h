@@ -43,9 +43,6 @@ namespace Sirens {
 		vector<Feature*> getSampleFeatures();
 		vector<Feature*> getSpectralFeatures();
 		
-		void setSampleFeatures(vector<Feature*> sample_features);
-		void setSpectralFeatures(vector<Feature*> spectral_features);
-		
 		int getMinHistorySize();
 		
 		void saveCSV(string csv_path);			// Saves a CSV file containing the features' trajectories.
