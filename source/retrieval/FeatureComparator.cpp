@@ -27,7 +27,7 @@
 namespace Sirens {
 	FeatureComparator::FeatureComparator(Feature* feature_in) {
 		feature = feature_in;
-		
+		initialized = false;
 		bestFit = NULL;
 	}
 
@@ -405,9 +405,21 @@ namespace Sirens {
 		smooth();
 		fitCurve();
 		createHMM();
+		
+		initialized = true;
+	}
+	
+	bool FeatureComparator::isInitialized() {
+		return initialized;
 	}
 	
 	double FeatureComparator::compare(FeatureComparator* model) {
+		if (!initialized)
+			initialize();
+		
+		if (!model->isInitialized())
+			model->initialize();
+			
 		ublas::matrix<double> other_trajectory = model->getTrajectory();
 		
 		int states = prior.size();
@@ -423,13 +435,13 @@ namespace Sirens {
 				for (int j = 0; j < frames; j++) {
 					ublas::vector<double> frame = ublas::matrix_column<ublas::matrix<double> >(other_trajectory, j);
 					ublas::vector<double> frame_mean = ublas::matrix_column<ublas::matrix<double> >(bestFit->mean, i);
-					
 					ublas::vector<double> deviation = frame - frame_mean;
 					
 					double constant = 1.0 / (2 * PI * sqrt(bestFit->covarianceDeterminant));
 					double exponential = exp(-0.5 * ublas::inner_prod(ublas::prod(ublas::trans(deviation), bestFit->covarianceInverse), deviation));
 					
 					emission_probabilities(i, j) = constant * exponential;
+					
 				}
 			}
 			

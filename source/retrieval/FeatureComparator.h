@@ -48,6 +48,7 @@ namespace Sirens {
 	class FeatureComparator {
 	private:
 		Feature* feature;							// feature trajectory that this model represents.
+		bool initialized;
 		
 		// Savitzky-Golay smoothing.
 		ublas::matrix<double> trajectory;			// row 0 is position; row 1 is velocity.
@@ -77,6 +78,7 @@ namespace Sirens {
 		
 		// General attributes.
 		Feature* getFeature();
+		bool isInitialized();
 		
 		// Savitzky-Golay trajectories.
 		ublas::matrix<double> getTrajectory();
