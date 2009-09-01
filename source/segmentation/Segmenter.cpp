@@ -28,7 +28,7 @@ namespace Sirens {
 		initialized = false;
 	}
 	
-	Segmenter::~Segmenter() {		
+	Segmenter::~Segmenter() {
 	}
 	
 	/*----------*
@@ -56,7 +56,6 @@ namespace Sirens {
 	
 		return indices;
 	}
-	
 	
 	double Segmenter::KalmanLPF(double y, double p[2][2], double x[2], double r, double q, double alpha) {
 		double k[2];
@@ -238,6 +237,7 @@ namespace Sirens {
 			createProbabilityTable();
 			
 			int edges = getEdges();
+			
 			modes = vector<int>(frames, 0);
 			
 			vector<double> cost_vector = vector<double>(edges, 0);
@@ -277,23 +277,24 @@ namespace Sirens {
 		if (features != NULL) {
 			vector<Feature*> feature_list = features->getFeatures();
 			frames = features->getMinHistorySize();
-		
+			
 			initialize();
-				
+			
 			for (int i = 0; i < frames; i++) {
 				for (int j = 0; j < feature_list.size(); j++)
 					y[j] = feature_list[j]->getHistoryFrame(i);
 			
 				viterbi(i);
 			}
-		
+			
 			vector<int> state_sequence(frames, 0);
+			
 			vector<double>::iterator minimum_cost = min_element(oldCosts.begin(), oldCosts.end());
 			state_sequence[frames - 1] = distance(oldCosts.begin(), minimum_cost);
-		
+			
 			for (int i = frames - 2; i > -1; i--) 
 				state_sequence[i] = psi[i][state_sequence[i + 1]];
-		
+			
 			for (int i = 0; i < frames; i++)
 				modes[i] = modeMatrix[0][state_sequence[i]];
 		}
