@@ -6,6 +6,12 @@ Features need to be hard-coded within Sirens right now. A more appropriate model
 
 Additionally, the segmentation algorithm could be implemented as a plugin of one of these formats, with a simple wrapper function to interpret the modes the plugin would output. 
 
+## Exceptions
+None of this code throws exceptions. More error-checking needs to be done.
+
+## Tests
+There are currently no unit tests. 
+
 ## Feature extraction
 1. **Algorithm documentation** - More complex features, such as Spectral Centroid, Transient Index, and Harmonicity need better code documentation. 
 
