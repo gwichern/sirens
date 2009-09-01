@@ -57,18 +57,15 @@ namespace Sirens {
 
 	double SoundComparator::compare(SoundComparator* sound_comparator) {
 		vector<FeatureComparator*> other_comparators = sound_comparator->getFeatureComparators();
-	
+		
 		if (other_comparators.size() != featureComparators.size())
 			return 0;
 		else {
 			double likelihood = 0;
 			
 			// Compare each feature against corresponding features from the other sound; sum likelihood.
-			for (int i = 0; i < featureComparators.size(); i++) {
-				double feature_likelihood = featureComparators[i]->compare(other_comparators[i]);
-				
-				likelihood +=  feature_likelihood;
-			}
+			for (int i = 0; i < featureComparators.size(); i++)
+				likelihood += featureComparators[i]->compare(other_comparators[i]);
 			
 			return likelihood;
 		}
