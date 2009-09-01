@@ -12,6 +12,10 @@ Any application using Sirens also needs to link against [FFTW](http://www.fftw.o
 To install Sirens, make sure you have [Python](http://www.python.org) and the [SCons](http://www.scons.org) build system installed. (Python is only used for building Sirens.) Additionally, make sure you have the [FFTW](http://www.fftw.org), [libsndfile](http://www.mega-nerd.com/libsndfile/), and [uBLAS](http://www.boost.org/doc/libs/1_40_0/libs/numeric/ublas/doc/index.htm) headers installed. Then, perform the following command in the project's directory:
 
 	sudo scons install
+
+To build the applications in the examples/ directory, do
+	
+	scons
 	
 To get rid of intermediate build files, type:
 	
