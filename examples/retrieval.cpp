@@ -44,32 +44,27 @@ int main() {
 	vector<FeatureSet*> feature_sets(files.size());
 	vector<SoundComparator*> comparators(files.size());
 	
-	// Initialize sounds.
+	// Initialize sounds
+	Sound* sound = new Sound();
+	sound->setFrameLength(0.04);
+	sound->setHopLength(0.02);
+	
 	for (int i = 0; i < files.size(); i++) {
-		// Initialize the sound files.
-		sounds[i] = new Sound();
-		sounds[i]->setFrameLength(0.04);
-		sounds[i]->setHopLength(0.02);
-		sounds[i]->open(files[i]);
+		// Initialize the sound file.
+		sound->open(files[i]);
 		
 		// The first frame of TransientIndex is junk, so record everything except the first frame.
-		int frames = sounds[i]->getFrameCount() - 1;
-		
-		int spectrum_size = sounds[i]->getSpectrumSize();
-		int sample_rate = sounds[i]->getSampleRate();
+		int frames = sound->getFrameCount() - 1;
+		int spectrum_size = sound->getSpectrumSize();
+		int sample_rate = sound->getSampleRate();
 		
 		// Initialize the features.
 		loudness[i] = new Loudness(frames);
-		transient_index[i] = new TransientIndex(frames, spectrum_size, sample_rate, 30, 15);
-		temporal_sparsity[i] = new TemporalSparsity(frames, 50);
+		transient_index[i] = new TransientIndex(frames, spectrum_size, sample_rate);
+		temporal_sparsity[i] = new TemporalSparsity(frames);
 		spectral_sparsity[i] = new SpectralSparsity(frames);
 		spectral_centroid[i] = new SpectralCentroid(frames, spectrum_size, sample_rate);
 		harmonicity[i] = new Harmonicity(frames, spectrum_size, sample_rate);
-		harmonicity[i]->setAbsThreshold(1);
-		harmonicity[i]->setThreshold(0.1);
-		harmonicity[i]->setSearchRegionLength(5);
-		harmonicity[i]->setMaxPeaks(3);
-		harmonicity[i]->setLPFCoefficient(0.7);
 		
 		// Initialize the feature set.
 		feature_sets[i] = new FeatureSet();
@@ -81,16 +76,14 @@ int main() {
 		feature_sets[i]->addSpectralFeature(harmonicity[i]);
 		
 		// Extract features.
-		sounds[i]->setFeatures(feature_sets[i]);
-		sounds[i]->extractFeatures();
-		sounds[i]->close();
+		sound->setFeatures(feature_sets[i]);
+		sound->extractFeatures();
+		sound->close();
 		
 		comparators[i] = new SoundComparator(feature_sets[i]);
-		comparators[i]->initialize();
 	}
 	
 	ublas::matrix<double> likelihood(files.size(), files.size());
-	
 	
 	// Compare each sound to itself and the other sound.
 	for (int i = 0; i < files.size(); i++) {
@@ -101,11 +94,12 @@ int main() {
 	ublas::matrix<double> affinity = normalize_affinity(likelihood);
 	
 	cout << "Log-likelihood: " << likelihood << endl;
-	cout << "Normalized distances: " << affinity << endl << endl;
+	cout << "Normalized distances: " << affinity << endl;
 	
 	// Clean up.
+	delete sound;
+	
 	for (int i = 0; i < files.size(); i++) {
-		delete sounds[i];
 		delete comparators[i];
 		delete feature_sets[i];
 		delete loudness[i];
