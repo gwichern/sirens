@@ -60,6 +60,7 @@ namespace Sirens {
 		double getValue();
 		
 		// Access to feature value history.
+		void addHistoryFrame(double value);			// Adds a fake history frame--useful for loading from files etc.
 		CircularArray* getHistory();
 		double getHistoryFrame(int i);
 		int getHistorySize();

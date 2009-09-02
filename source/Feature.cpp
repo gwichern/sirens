@@ -67,6 +67,10 @@ namespace Sirens {
 	 * History. *
 	 *----------*/
 	
+	void Feature::addHistoryFrame(double value) {
+		history->addValue(value);
+	}
+	
 	CircularArray* Feature::getHistory() {
 		return history;
 	}
