@@ -40,7 +40,9 @@ namespace Sirens {
 	
 	class Segmenter {
 	private:
-		FeatureSet* features;
+		FeatureSet* featureSet;
+		vector<Feature*> features;
+		
 		bool initialized;													// on-demand initialization (called from segment())
 		
 		// Initialization.
@@ -78,8 +80,8 @@ namespace Sirens {
 		~Segmenter();
 		
 		// Features.
-		void setFeatures(FeatureSet* features_in);
-		FeatureSet* getFeatures();
+		void setFeatureSet(FeatureSet* feature_set);
+		FeatureSet* getFeatureSet();
 		
 		// Attributes.
 		void setPNew(double value);

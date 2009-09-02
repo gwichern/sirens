@@ -24,7 +24,7 @@ namespace Sirens {
 		setPNew(p_new);
 		setPOff(p_off);
 		
-		features = NULL;
+		featureSet = NULL;
 		initialized = false;
 	}
 	
@@ -36,17 +36,17 @@ namespace Sirens {
 	 *----------*/
 	
 	int Segmenter::getEdges() {
-		return 3 * pow(3.0, double(features->getFeatures().size()));
+		return 3 * pow(3.0, double(features.size()));
 	}
 	
 	vector<int> Segmenter::getFeatureIndices(int feature) {
-		vector<int> indices(features->getFeatures().size() + 1, 0);
+		vector<int> indices(features.size() + 1, 0);
 		
 		indices[0] = int(ceil(double(feature) / double(getEdges() / 3)));
 		
-		for (int i = 0; i < features->getFeatures().size(); i++) {			
-			int top_index = pow(3.0, double(features->getFeatures().size() - i));
-			int bottom_index = pow(3.0, double(features->getFeatures().size() - i - 1));
+		for (int i = 0; i < features.size(); i++) {			
+			int top_index = pow(3.0, double(features.size() - i));
+			int bottom_index = pow(3.0, double(features.size() - i - 1));
 						
 			indices[i + 1] = ceil(double(feature % top_index) / double(bottom_index));
 						
@@ -92,12 +92,13 @@ namespace Sirens {
 	void Segmenter::viterbi(int frame) {
 		int edges = getEdges();
 		
+		// Compute costs for all possible next states.
 		for (int new_index = 0; new_index < edges; new_index++) {
 			for (int old_index = 0; old_index < edges; old_index++) {
 				double cost_temp = 0;
 				
-				for (int feature_index = 0; feature_index < features->getFeatures().size(); feature_index++) {
-					SegmentationParameters* parameters = features->getFeatures()[feature_index]->getSegmentationParameters();
+				for (int feature_index = 0; feature_index < features.size(); feature_index++) {
+					SegmentationParameters* parameters = features[feature_index]->getSegmentationParameters();
 					
 					newDistributions[feature_index][new_index][old_index].cost = KalmanLPF(
 						y[feature_index],
@@ -115,6 +116,7 @@ namespace Sirens {
 			}
 		}
 		
+		// Find the next element with least cost along each path.
 		for (int i = 0; i < costs.size(); i++) {
 			vector<double>::iterator minimum_iterator = min_element(costs[i].begin(), costs[i].end());
 			psi[frame][i] = distance(costs[i].begin(), minimum_iterator);
@@ -123,7 +125,7 @@ namespace Sirens {
 		
 		// Copy best filtered states and covariances.
 		for (int i = 0; i < edges; i++) {
-			for (int feature_index = 0; feature_index < features->getFeatures().size(); feature_index++) {
+			for (int feature_index = 0; feature_index < features.size(); feature_index++) {
 				for (int row = 0; row < 2; row++) {
 					maxDistributions[feature_index][i].mean[row] = newDistributions[feature_index][i][psi[frame][i]].mean[row];
 					
@@ -138,12 +140,13 @@ namespace Sirens {
 	 * Features. *
 	 *-----------*/
 	
-	void Segmenter::setFeatures(FeatureSet* features_in) {
-		features = features_in;
+	void Segmenter::setFeatureSet(FeatureSet* feature_set) {
+		featureSet = feature_set;
+		features = featureSet->getFeatures();
 	}
 	
-	FeatureSet* Segmenter::getFeatures() {
-		return features;
+	FeatureSet* Segmenter::getFeatureSet() {
+		return featureSet;
 	}
 	
 	/*-------------*
@@ -196,12 +199,12 @@ namespace Sirens {
 		probabilityMatrix = vector<vector<double> >(edges, double_row);
 		
 		vector<int> int_row(edges);
-		modeMatrix = vector<vector<int> >(int(features->getFeatures().size() + 1), int_row);
+		modeMatrix = vector<vector<int> >(int(features.size() + 1), int_row);
 				
 		for (int i = 0; i < edges; i++) {
 			vector<int> indices = getFeatureIndices(i + 1);
 			
-			for (int j = 0; j < features->getFeatures().size() + 1; j++)
+			for (int j = 0; j < features.size() + 1; j++)
 				modeMatrix[j][i] = indices[j];
 		}
 		
@@ -211,11 +214,11 @@ namespace Sirens {
 				mode_new = modeMatrix[0][j];
 				gate_probability = 1.0;
 				
-				for (int k = 0; k < features->getFeatures().size(); k++) {
+				for (int k = 0; k < features.size(); k++) {
 					feature_mode_old = modeMatrix[k + 1][i];
 					feature_mode_new = modeMatrix[k + 1][j];
 					
-					gate_probability *= features->getFeatures()[k]->getSegmentationParameters()->fusionLogic[mode_old - 1][mode_new - 1][feature_mode_old - 1][feature_mode_new - 1];
+					gate_probability *= features[k]->getSegmentationParameters()->fusionLogic[mode_old - 1][mode_new - 1][feature_mode_old - 1][feature_mode_new - 1];
 				}
 					
 				probabilityMatrix[j][i] = modeTransitions[mode_old - 1][mode_new - 1] * gate_probability;
@@ -230,8 +233,8 @@ namespace Sirens {
 	
 	void Segmenter::initialize() {
 		if (!initialized) {
-			for (int i = 0; i < features->getFeatures().size(); i++)
-				features->getFeatures()[i]->getSegmentationParameters()->initialize();
+			for (int i = 0; i < features.size(); i++)
+				features[i]->getSegmentationParameters()->initialize();
 			
 			createModeLogic();
 			createProbabilityTable();
@@ -248,21 +251,21 @@ namespace Sirens {
 			psi = vector<vector<int> >(frames, psi_row);
 			
 			vector<ViterbiDistribution> temp1(edges);
-			maxDistributions = vector<vector<ViterbiDistribution> >(features->getFeatures().size(), temp1);
+			maxDistributions = vector<vector<ViterbiDistribution> >(features.size(), temp1);
 			
 			vector<vector<ViterbiDistribution> > temp2(edges, temp1);
-			newDistributions = vector<vector<vector<ViterbiDistribution> > >(features->getFeatures().size(), temp2);
+			newDistributions = vector<vector<vector<ViterbiDistribution> > >(features.size(), temp2);
 			
-			for (int i = 0; i < features->getFeatures().size(); i++) {
+			for (int i = 0; i < features.size(); i++) {
 				for (int a = 0; a < 2; a++) {
-					maxDistributions[i][0].mean[a] = features->getFeatures()[i]->getSegmentationParameters()->xInit[a];
+					maxDistributions[i][0].mean[a] = features[i]->getSegmentationParameters()->xInit[a];
 					
 					for (int b = 0; b < 2; b++)
-						maxDistributions[i][0].covariance[a][b] = features->getFeatures()[i]->getSegmentationParameters()->pInit[a][b];
+						maxDistributions[i][0].covariance[a][b] = features[i]->getSegmentationParameters()->pInit[a][b];
 				}
 			}
 			
-			y = vector<double>(features->getFeatures().size(), 0);
+			y = vector<double>(features.size(), 0);
 			
 			initialized = true;
 		}
@@ -274,15 +277,14 @@ namespace Sirens {
 	 *---------------*/
 	
 	void Segmenter::segment() {
-		if (features != NULL) {
-			vector<Feature*> feature_list = features->getFeatures();
-			frames = features->getMinHistorySize();
+		if (featureSet != NULL) {
+			frames = featureSet->getMinHistorySize();
 			
 			initialize();
 			
 			for (int i = 0; i < frames; i++) {
-				for (int j = 0; j < feature_list.size(); j++)
-					y[j] = feature_list[j]->getHistoryFrame(i);
+				for (int j = 0; j < features.size(); j++)
+					y[j] = features[j]->getHistoryFrame(i);
 			
 				viterbi(i);
 			}
