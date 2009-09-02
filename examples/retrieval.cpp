@@ -76,7 +76,7 @@ int main() {
 		feature_sets[i]->addSpectralFeature(harmonicity[i]);
 		
 		// Extract features.
-		sound->setFeatures(feature_sets[i]);
+		sound->setFeatureSet(feature_sets[i]);
 		sound->extractFeatures();
 		sound->close();
 		

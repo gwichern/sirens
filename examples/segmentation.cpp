@@ -27,7 +27,7 @@ int main() {
 	Sound* sound = new Sound();
 	sound->setFrameLength(0.04);
 	sound->setHopLength(0.02);
-	sound->open("sounds/whistle4.wav");
+	sound->open("/Users/brandon/Documents/git/sirens/examples/sounds/whistle4.wav");
 	
 	cout << "sounds/whistle4.wav" << endl;
 	cout << "\tSamples: " << sound->getSampleCount() << endl;
@@ -78,19 +78,19 @@ int main() {
 	spectral_sparsity->getSegmentationParameters()->setPLagPlus(0.75);
 	spectral_sparsity->getSegmentationParameters()->setPLagMinus(0.75);
 	
-	FeatureSet* features = new FeatureSet();
-	features->addSampleFeature(loudness);
-	features->addSpectralFeature(spectral_centroid);
-	features->addSpectralFeature(spectral_sparsity);
+	FeatureSet* feature_set = new FeatureSet();
+	feature_set->addSampleFeature(loudness);
+	feature_set->addSpectralFeature(spectral_centroid);
+	feature_set->addSpectralFeature(spectral_sparsity);
 	
 	// Extract features.	
-	sound->setFeatures(features);
+	sound->setFeatureSet(feature_set);
 	sound->extractFeatures();	
 	sound->close();
 		
 	// Segment sound.
 	Segmenter* segmenter = new Segmenter(0.00000000001, 0.00000000001);
-	segmenter->setFeatures(features);
+	segmenter->setFeatureSet(feature_set);
 	segmenter->segment();
 	
 	vector<vector<int> > segments = segmenter->getSegments();
@@ -104,7 +104,7 @@ int main() {
 	// Clean up.
 	delete sound;
 	delete segmenter;
-	delete features;
+	delete feature_set;
 	delete loudness;
 	delete spectral_centroid;
 	delete spectral_sparsity;

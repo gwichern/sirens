@@ -52,25 +52,25 @@ int main() {
 	harmonicity->setLPFCoefficient(0.7);
 	
 	// Initialize a feature set to hold all the features.
-	FeatureSet* features = new FeatureSet();
-	features->addSampleFeature(loudness);
-	features->addSampleFeature(temporal_sparsity);
-	features->addSpectralFeature(spectral_sparsity);
-	features->addSpectralFeature(spectral_centroid);
-	features->addSpectralFeature(transient_index);
-	features->addSpectralFeature(harmonicity);
+	FeatureSet* feature_set = new FeatureSet();
+	feature_set->addSampleFeature(loudness);
+	feature_set->addSampleFeature(temporal_sparsity);
+	feature_set->addSpectralFeature(spectral_sparsity);
+	feature_set->addSpectralFeature(spectral_centroid);
+	feature_set->addSpectralFeature(transient_index);
+	feature_set->addSpectralFeature(harmonicity);
 	
 	// Extract features.
-	sound->setFeatures(features);
+	sound->setFeatureSet(feature_set);
 	sound->extractFeatures();
 	sound->close();
 	
 	// Save features.
-	features->saveCSV("features.csv");
+	feature_set->saveCSV("features.csv");
 	
 	// Clean up.
 	delete sound;
-	delete features;
+	delete feature_set;
 	delete loudness;
 	delete harmonicity;
 	delete transient_index;
