@@ -18,8 +18,8 @@
 #include "SoundComparator.h"
 
 namespace Sirens {
-	SoundComparator::SoundComparator(FeatureSet* features_in) {
-		setFeatures(features_in);
+	SoundComparator::SoundComparator(FeatureSet* feature_set) {
+		setFeatureSet(feature_set);
 	}
 
 	SoundComparator::~SoundComparator() {
@@ -31,14 +31,14 @@ namespace Sirens {
 			delete featureComparators[i];	
 	}
 	
-	void SoundComparator::setFeatures(FeatureSet* features_in) {
-		features = features_in;
+	void SoundComparator::setFeatureSet(FeatureSet* feature_set) {
+		featureSet = feature_set;
 		
 		// Make new comparators for every feature in the feature set.
-		if (features != NULL) {
+		if (featureSet != NULL) {
 			freeMemory();
 			
-			vector<Feature*> feature_list = features->getFeatures();
+			vector<Feature*> feature_list = featureSet->getFeatures();
 
 			featureComparators.resize(feature_list.size());
 
@@ -47,8 +47,8 @@ namespace Sirens {
 		}
 	}
 	
-	FeatureSet* SoundComparator::getFeatures() {
-		return features;
+	FeatureSet* SoundComparator::getFeatureSet() {
+		return featureSet;
 	}
 
 	vector<FeatureComparator*> SoundComparator::getFeatureComparators() {
