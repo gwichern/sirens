@@ -131,12 +131,12 @@ namespace Sirens {
 	 * Features.
 	 */
 	
-	FeatureSet* Sound::getFeatures() {
-		return features;
+	FeatureSet* Sound::getFeatureSet() {
+		return featureSet;
 	}
 	
-	void Sound::setFeatures(FeatureSet* new_features) {
-		features = new_features;
+	void Sound::setFeatureSet(FeatureSet* feature_set) {
+		featureSet = feature_set;
 	}
 	
 	void Sound::extractFeatures() {
@@ -170,7 +170,7 @@ namespace Sirens {
 			// The first hop or two will not necessarily be a full frame's worth of data.
 			if (sample_array.getSize() == sample_array.getMaxSize() && readcount == samples_per_hop) {
 				// Calculate sample features.
-				features->calculateSampleFeatures(&sample_array);
+				featureSet->calculateSampleFeatures(&sample_array);
 				
 				// Window the time-domain signal for STFT.
 				for (int i = 0; i < getSamplesPerFrame(); i++)
@@ -187,7 +187,7 @@ namespace Sirens {
 				}
 				
 				// Calculate spectral features.
-				features->calculateSpectralFeatures(&spectrum_array);
+				featureSet->calculateSpectralFeatures(&spectrum_array);
 				
 				frame_number = frame_number + 1;
 			}

@@ -36,7 +36,7 @@ namespace Sirens {
 		SNDFILE* soundFile;
 		SF_INFO soundInfo;
 		
-		FeatureSet* features;
+		FeatureSet* featureSet;
 		
 	public:
 		Sound();
@@ -65,8 +65,8 @@ namespace Sirens {
 		int getSpectrumSize();
 		
 		// Features.
-		FeatureSet* getFeatures();
-		void setFeatures(FeatureSet* new_features);
+		FeatureSet* getFeatureSet();
+		void setFeatureSet(FeatureSet* feature_set);
 		void extractFeatures();		
 	};
 }
