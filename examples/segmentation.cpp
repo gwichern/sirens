@@ -27,7 +27,7 @@ int main() {
 	Sound* sound = new Sound();
 	sound->setFrameLength(0.04);
 	sound->setHopLength(0.02);
-	sound->open("/Users/brandon/Documents/git/sirens/examples/sounds/whistle4.wav");
+	sound->open("sounds/whistle4.wav");
 	
 	cout << "sounds/whistle4.wav" << endl;
 	cout << "\tSamples: " << sound->getSampleCount() << endl;
