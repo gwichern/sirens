@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, SCons.Util
 
 source_prefix = 'source/'
 
@@ -10,10 +10,6 @@ def append_source_prefix(header_list):
 AddOption('--prefix', default = '/usr/local', dest = 'prefix', type = 'string', nargs = 1, action = 'store', metavar = 'DIR', help = 'installation prefix')
 AddOption('--shared', action = 'store_true', dest = 'shared', help = 'use to build a shared library')
 AddOption('--debug-symbols', action = 'store_true', dest = 'debug_symbols', help = 'build in debug symbols')
-
-other_flags = ''
-if GetOption('debug_symbols'):
-	other_flags = '-g'
 
 # Headers.
 install_segmentation_headers = append_source_prefix([
@@ -54,11 +50,19 @@ compile_source.extend(Glob(os.path.join(source_prefix, 'segmentation/*.cpp')))
 # Environment.
 environment = Environment(CC = 'gcc')
 
-try:
-	environment.Append(CPPFLAGS = os.environ['CPPFLAGS'] + ' ' + other_flags)
-	print "Using CPPFLAGS: " + os.environ['CPPFLAGS']
-except KeyError:
-	environment.Append(CPPFLAGS = other_flags)
+if GetOption('debug_symbols'):
+	environment['CCFLAGS'] += SCons.Util.CLVar('-g')
+
+if os.environ.has_key('CC'):
+	environment['CC'] = os.environ['CC']
+if os.environ.has_key('CFLAGS'):
+	environment['CCFLAGS'] += SCons.Util.CLVar(os.environ['CFLAGS'])
+if os.environ.has_key('CXX'):
+	environment['CXX'] = os.environ['CXX']
+if os.environ.has_key('CXXFLAGS'):
+	environment['CXXFLAGS'] += SCons.Util.CLVar(os.environ['CXXFLAGS'])
+if os.environ.has_key('LDFLAGS'):
+	environment['LINKFLAGS'] += SCons.Util.CLVar(os.environ['LDFLAGS'])
 
 environment.Append(PREFIX = GetOption('prefix'))
 
