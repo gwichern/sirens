@@ -95,12 +95,12 @@ namespace Sirens {
 					filterBank[(i * spectrumSize) + j] = 0;
 			}
 		}
-	
+		
 		for (int i = 0; i < mels; i++) {
 			mfccNew[i] = 0;
 			mfccOld[i] = 0;
 		}
-	
+		
 		for (int i = 0; i < filters; i++)
 			filterTemp[i] = 0;
 	
