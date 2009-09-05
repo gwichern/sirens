@@ -53,6 +53,8 @@ int main(int argc, char** argv) {
 		sound->setHopLength(0.02);
 	
 		for (int i = 0; i < files.size(); i++) {
+			cout << files[i] << " . . . ";
+			
 			// Initialize the sound file.
 			sound->open(files[i]);
 		
@@ -84,7 +86,11 @@ int main(int argc, char** argv) {
 			sound->close();
 		
 			comparators[i] = new SoundComparator(feature_sets[i]);
+			
+			cout << "done." << endl;
 		}
+		
+		cout << "Comparing sounds . . . ";
 	
 		ublas::matrix<double> likelihood(files.size(), files.size());
 	
@@ -93,15 +99,17 @@ int main(int argc, char** argv) {
 			for (int j = 0; j < files.size(); j++)
 				likelihood(i, j) = comparators[i]->compare(comparators[j]);
 		}
-	
+		
 		ublas::matrix<double> affinity = normalize_affinity(likelihood);
-	
+		
+		cout << "done." << endl << endl;
+		
 		cout << "Log-likelihood: " << likelihood << endl;
 		cout << "Normalized distances: " << affinity << endl;
-	
+		
 		// Clean up.
 		delete sound;
-	
+		
 		for (int i = 0; i < files.size(); i++) {
 			delete comparators[i];
 			delete feature_sets[i];
