@@ -23,9 +23,9 @@ using namespace std;
 namespace Sirens {
 	int round(double a) {
 		if ((a - floor(a)) >= 0.5)
-			return ceil(a);
+			return int(ceil(a));
 		else
-			return floor(a);
+			return int(floor(a));
 	}
 	
 	int minimum(int a, int b) {
