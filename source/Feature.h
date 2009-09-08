@@ -85,6 +85,8 @@ namespace Sirens {
 		Feature* feature = (Feature*)data;
 
 		feature->prepareCalculation();
+		
+		return NULL;
 	}
 }
 
