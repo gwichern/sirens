@@ -44,7 +44,7 @@ namespace Sirens {
 		~Sound();
 		
 		// I/O.
-		void open(string path_in);
+		bool open(string path_in);
 		void close();
 		
 		// Basic sound information.

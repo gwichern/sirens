@@ -47,12 +47,10 @@ namespace Sirens {
 	 * IO
 	 */
 	
-	void Sound::open(string path_in) {
+	bool Sound::open(string path_in) {
 		path = path_in;
 		
-		if (!(soundFile = sf_open(path.c_str(), SFM_READ, &soundInfo))) {
-			// Error;
-		}
+		return (soundFile = sf_open(path.c_str(), SFM_READ, &soundInfo));
 	}
 	
 	void Sound::close() {
