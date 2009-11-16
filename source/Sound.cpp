@@ -22,6 +22,9 @@
 #include "support/math_support.h"
 #include "support/string_support.h"
 
+#include <iostream>
+using namespace std;
+
 namespace Sirens {
 	Sound::Sound() {
 		frameLength = 0.04;
@@ -50,7 +53,14 @@ namespace Sirens {
 	bool Sound::open(string path_in) {
 		path = path_in;
 		
-		return (soundFile = sf_open(path.c_str(), SFM_READ, &soundInfo));
+		soundFile = sf_open(path.c_str(), SFM_READ, &soundInfo);
+		
+		if (soundFile)
+			return true;
+		else {
+			cerr << sf_strerror(soundFile);
+			return false;
+		}
 	}
 	
 	void Sound::close() {
