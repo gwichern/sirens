@@ -24,7 +24,11 @@ using namespace std;
 
 namespace Sirens {
 	void Loudness::performCalculation() {
-		value = 20 * log10(signal_rms(input));
+		double rms_val=signal_rms(input);
+		if (rms_val)
+			value = 20 * log10(rms_val);
+		else
+			value = 20 * log10(10e-6);
 	}
 
 	string Loudness::toString() {

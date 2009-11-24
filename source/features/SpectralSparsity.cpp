@@ -26,6 +26,7 @@ namespace Sirens {
 	void SpectralSparsity::performCalculation() {
 		double max = 0;
 		double sum = 0;
+		value=0;
 		
 		int input_size = input->getSize();
 		double* input_item = input->getData();
@@ -36,8 +37,8 @@ namespace Sirens {
 			
 			input_item ++;
 		}
-		
-		value = max / sum;
+		if (sum)
+			value = max / sum;
 	}
 
 	string SpectralSparsity::toString() {

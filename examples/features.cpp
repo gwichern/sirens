@@ -28,6 +28,7 @@ int main(int argc, char** argv) {
 		sound->setFrameLength(0.04);
 		sound->setHopLength(0.02);
 		sound->open(argv[1]);
+		sound->setChanOption(0);
 	
 		// Output some information about the sound.
 		cout << argv[1] << endl;
@@ -45,7 +46,7 @@ int main(int argc, char** argv) {
 	
 		Loudness* loudness = new Loudness(frames);
 		TransientIndex* transient_index = new TransientIndex(frames, spectrum_size, sample_rate, 30, 15);
-		TemporalSparsity* temporal_sparsity = new TemporalSparsity(frames, 50);
+		TemporalSparsity* temporal_sparsity = new TemporalSparsity(frames, 49);
 		SpectralSparsity* spectral_sparsity = new SpectralSparsity(frames);
 		SpectralCentroid* spectral_centroid = new SpectralCentroid(frames, spectrum_size, sample_rate);
 		Harmonicity* harmonicity = new Harmonicity(frames, spectrum_size, sample_rate);

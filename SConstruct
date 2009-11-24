@@ -19,7 +19,9 @@ install_segmentation_headers = append_source_prefix([
 
 install_retrieval_headers = append_source_prefix([
 	'retrieval/FeatureComparator.h',
-	'retrieval/SoundComparator.h'
+	'retrieval/SoundComparator.h',
+	'retrieval/SimpleFeatureComparator.h',
+	'retrieval/SimpleSoundComparator.h'
 ])
 
 install_feature_headers = append_source_prefix([
@@ -71,6 +73,7 @@ library = environment.Library('sirens', compile_source)
 # Examples.
 segmentation_example = environment.Program('examples/segmentation', 'examples/segmentation.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
 retrieval_example = environment.Program('examples/retrieval', 'examples/retrieval.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
+simple_retrieval_example = environment.Program('examples/simple_retrieval', 'examples/simple_retrieval.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
 features_example = environment.Program('examples/features', 'examples/features.cpp', LIBS = ['sirens', 'fftw3', 'sndfile'], LIBPATH = '.')
 
 # Install library.

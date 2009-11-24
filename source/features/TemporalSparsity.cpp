@@ -52,24 +52,27 @@ namespace Sirens {
 		
 		rmsWindow->addValue(rms);
 		
-		if (rmsWindow->getSize() >= rmsWindow->getMaxSize()) {
-			double max = 0;
-			double sum = 0;
-			
-			double* rms_item = rmsWindow->getData();
-			int rms_size = rmsWindow->getSize();
-			
-			for (int i = 0; i < rms_size; i++) {
-				max = maximum(max, (*rms_item));
-				sum += (*rms_item);
-				
-				rms_item ++;
-			}
-			
-			value = max / sum;
+		double max = 0;
+		double sum = 0;
+		value=0;
 		
-		} else
-			value = 0;
+		double* rms_item = rmsWindow->getData();
+		int rms_size = rmsWindow->getSize();
+		
+		for (int i = 0; i < rms_size; i++) {
+			max = maximum(max, (*rms_item));
+			sum += (*rms_item);
+			
+			rms_item ++;
+		}
+		
+		if (sum) {
+			if (rmsWindow->getSize() >= rmsWindow->getMaxSize())
+				value = max / sum;
+			else
+				value = (double(rmsWindow->getSize()) / double(rmsWindow->getMaxSize())) * max / sum;
+			
+		}
 	}	
 
 	string TemporalSparsity::toString() {

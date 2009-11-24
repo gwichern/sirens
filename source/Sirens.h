@@ -24,6 +24,8 @@
 #include "Sound.h"
 #include "retrieval/SoundComparator.h"
 #include "retrieval/FeatureComparator.h"
+#include "retrieval/SimpleSoundComparator.h"
+#include "retrieval/SimpleFeatureComparator.h"
 #include "segmentation/SegmentationParameters.h"
 #include "segmentation/Segmenter.h"
 #include "features/Harmonicity.h"

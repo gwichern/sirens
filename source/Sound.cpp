@@ -29,6 +29,7 @@ namespace Sirens {
 	Sound::Sound() {
 		frameLength = 0.04;
 		hopLength = 0.02;
+		chanOption = 0;
 		
 		soundFile = NULL;
 		path = "";
@@ -37,6 +38,7 @@ namespace Sirens {
 	Sound::Sound(string path_in) {
 		frameLength = 0.04;
 		hopLength = 0.02;
+		chanOption = 0;
 		soundFile = NULL;
 		
 		open(path_in);
@@ -75,7 +77,7 @@ namespace Sirens {
 	 */
 	
 	int Sound::getSampleCount() {
-		return soundInfo.frames;
+		return soundInfo.channels*soundInfo.frames;
 	}
 
 	int Sound::getSampleRate() {
@@ -101,6 +103,13 @@ namespace Sirens {
 	void Sound::setFrameLength(double frame_length) {
 		frameLength = frame_length;
 	}
+
+	void Sound::setChanOption(int chan_option) {
+		if (chan_option > soundInfo.channels || chan_option < 0)
+			chanOption=0;
+		else
+			chanOption=chan_option;
+	}
 	
 	string Sound::getPath() {
 		return path;
@@ -115,7 +124,7 @@ namespace Sirens {
 	}
 	
 	int Sound::getSamplesPerHop() {
-		return int(hopLength * double(getSampleRate()));
+		return soundInfo.channels * int(hopLength * double(getSampleRate()));
 	}
 	
 	int Sound::getFrameCount() {
@@ -169,10 +178,26 @@ namespace Sirens {
 		while (readcount = sf_read_double(soundFile, hop_samples, samples_per_hop)) {
 			// Similar to the FFT, it's necessary to copy read values element-by-eleent to allow CircularArray to be thead-safe.
 			double* sample_value = hop_samples;
+			double avg_samp = 0;
 			
-			for (int i = 0; i < readcount; i++) {
-				sample_array.addValue(*sample_value);
-				sample_value ++;
+			if (chanOption){
+				for (int i = 0; i < (chanOption - 1); i++)
+					sample_value++; 
+				for (int i = (chanOption - 1); i < readcount; i+=soundInfo.channels) {
+					sample_array.addValue(*sample_value);
+					for (int j = 0; j < soundInfo.channels; j++)
+						sample_value ++;
+				}
+			}else{
+				for (int i = 0; i < readcount; i+=soundInfo.channels) {
+					avg_samp=0;
+					for (int j = 0; j < soundInfo.channels; j++){
+						avg_samp += *sample_value;
+						sample_value ++;
+					}
+					avg_samp /= double(soundInfo.channels);
+					sample_array.addValue(avg_samp);
+				}
 			}
 			
 			// The first hop or two will not necessarily be a full frame's worth of data.
